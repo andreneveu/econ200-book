@@ -1,5 +1,5 @@
 --- 
-title: "Materials for Introductory Macroeconomics"
+title: "Materials for ECON200: Introductory Macroeconomics"
 author: "Andre R. Neveu"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -14,6 +14,50 @@ description: "Examining macroeconomic data for introductory students."
 
 This site will include supplemental material to our regular macroeconomics course readings. 
 
+```{r setup, include=FALSE}
+options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# Code to automatically pull in and install missing packages
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+```
+
+
+```{r, include = FALSE}
+library(readr)
+library(quantmod)
+library(zoo)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(dplyr)
+library(wbstats)
+library(ggplot2)
+library(usmap)
+library(gtrendsR)
+library(tmap)
+library(spData)
+library(pwt9)
+library(googleVis)
+
+```
+
+
+	
+```{r}
+unems <- wb(country = c("BRA","IND","MEX"),
+               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
+
+ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) + 
+  geom_line(size = 1) +
+  labs(title = "Brazil, Mexico & India Unemployment", x = "Date", y = "Percent", color = "Country") + 
+  theme_classic()
+
+
+```
+	
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages

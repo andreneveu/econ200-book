@@ -36,7 +36,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Materials for Introductory Macroeconomics},
+  pdftitle={Materials for ECON200: Introductory Macroeconomics},
   pdfauthor={Andre R. Neveu},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -111,7 +111,7 @@
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
 
-\title{Materials for Introductory Macroeconomics}
+\title{Materials for ECON200: Introductory Macroeconomics}
 \author{Andre R. Neveu}
 \date{2020-05-18}
 
@@ -126,6 +126,20 @@
 \chapter{Introduction}\label{introduction}}
 
 This site will include supplemental material to our regular macroeconomics course readings.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{unems <-}\StringTok{ }\KeywordTok{wb}\NormalTok{(}\DataTypeTok{country =} \KeywordTok{c}\NormalTok{(}\StringTok{"BRA"}\NormalTok{,}\StringTok{"IND"}\NormalTok{,}\StringTok{"MEX"}\NormalTok{),}
+               \DataTypeTok{indicator =} \KeywordTok{c}\NormalTok{(}\StringTok{"SL.UEM.TOTL.ZS"}\NormalTok{), }\DataTypeTok{mrv=}\DecValTok{30}\NormalTok{, }\DataTypeTok{gapfill=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{POSIXct =} \OtherTok{TRUE}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{(unems, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ date_ct, }\DataTypeTok{y =}\NormalTok{ value, }\DataTypeTok{color =}\NormalTok{ iso2c)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{size =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Brazil, Mexico & India Unemployment"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"Date"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Percent"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"Country"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{econ200-book_files/figure-latex/unnamed-chunk-2-1.pdf}
 
 \hypertarget{intro}{%
 \chapter{Introduction}\label{intro}}
