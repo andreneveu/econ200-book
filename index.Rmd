@@ -12,7 +12,7 @@ description: "Examining macroeconomic data for introductory students."
 
 # Preface {-}
 
-This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy.  
+This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy. This material will accompany @tw which will be the primary book for the course. We will also be using @core, and the other materials compiled by CORE including *Economy, Society, & Public Policy* [@espp] and *Doing Economics* [@doing] which act as useful comparisons to the more traditional material presented in @tw. 
 
 ```{r setup, include=FALSE}
 options(repos = "http://lib.stat.cmu.edu/R/CRAN/")

@@ -20,8 +20,10 @@ library(googleVis)
 
 
 ```
-	
-```{r, echo = FALSE}
+
+In Figure \@ref(fig:unems) below, you will see the unemployment rate for four countries averaged over each year. The unemployment rate measures the percent of people who cannot find a job in the group of those people either working or looking for work. It seems like a mouthful, but we are estimating the proportion of people who are technically in the *labor force*. 
+
+```{r unems, echo = FALSE, fig.cap='Unemployment Rates Around the World', out.width='80%', fig.asp=.75, fig.align='center'}
 unems <- wb(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
@@ -33,17 +35,16 @@ ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) +
 
 ```
 	
-In the image above, you will see the average annual unemployment rates for four countries. This measures the percent of people who cannot find a job in the group of those people either working or looking for work.
 
-This is measured as 
+>**Labor Force** is the sum of those who are employed and those actively looking for work. 
+
+We measure the unemployment rate as: 
 
 $$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 $$
 
-This material will accompany [@tw] which will be the primary book for the course. We will also be using [@core], and the other materials compiled by CORE including [@espp] and [@doing] which act as useful comparisons to the more traditional material presented in [@tw]. 
+Something important about Figure \@ref(fig:unems) is that we can see in some countries the unemployment rate is much higher than in other countries. Partially this is because we do not all use the same measurements for those who are either technically unemployed or working. However, if we assume countries do a consistent job in measuring these rates, the changes are still somewhat accurate. For example, in the United States a monthly survey of about 60,000 households counts those considered unemployed not just as those people collecting unemployment payments, but also includes all those people who have actively sought work in the past four weeks [(Bureau of Labor Statistics)](https://www.bls.gov/cps/cps_htgm.htm). 
 
-In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures \@ref(fig:jobs) and \@ref(fig:vmt) people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
-
-Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures \@ref(fig:jobs) and \@ref(fig:vmt) people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. 
 
 ```{r jobs, echo = FALSE, fig.cap='Jobless Claims Skyrocket in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
 jobs <- tq_get("ICSA", 
@@ -63,11 +64,15 @@ vmt %>% ggplot(aes(date,price)) +
   labs(x = "Date", y = "Millions of Miles", title = "Vehicle Miles Traveled", color = "Series")
 ```
 
-Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
+Table \@ref(tab:initial) shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before. 
 
-```{r nice-tab, tidy=FALSE}
+```{r initial, echo=FALSE}
+jobs2 <- jobs %>% 
+  rename(Date = date,
+         Claims = price)
+
 knitr::kable(
-  head(iris, 20), caption = 'Here is a nice table!',
+  tail(jobs2[,2:3], 15), caption = 'The Last 15 Weeks of Initial Unemployment Claims',
   booktabs = TRUE
 )
 ```
