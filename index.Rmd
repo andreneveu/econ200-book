@@ -4,15 +4,15 @@ author: "Andre R. Neveu"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
-bibliography: [book.bib, packages.bib]
-biblio-style: apalike
+bibliography: [refs.bib]
+biblio-style: aer
 link-citations: yes
 description: "Examining macroeconomic data for introductory students."
 ---
 
 # Preface {-}
 
-This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand the economy.  
+This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy.  
 
 ```{r setup, include=FALSE}
 options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
@@ -27,31 +27,12 @@ if(length(new.packages)) install.packages(new.packages)
 ```{r, include = FALSE}
 library(readr)
 library(quantmod)
-library(zoo)
-library(tidyquant)
-library(tidyverse)
-library(lubridate)
-library(reshape2)
 library(dplyr)
 library(wbstats)
 library(ggplot2)
-library(usmap)
-library(gtrendsR)
-library(tmap)
-library(spData)
-library(pwt9)
-library(googleVis)
-
 ```
 
-```{r, echo=FALSE}
-jobs <- tq_get("ICSA", 
-                 get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-jobs %>% ggplot(aes(date,price)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Percent", title = "Initial Jobless Claims", color = "Series")
-```
+
 
 	
 ```{r, echo = FALSE}
@@ -67,9 +48,3 @@ ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) +
 ```
 	
 
-```{r include=FALSE}
-# automatically create a bib database for R packages
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
-```

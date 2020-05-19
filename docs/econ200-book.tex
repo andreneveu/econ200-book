@@ -109,11 +109,11 @@
 \setcounter{secnumdepth}{5}
 \usepackage{booktabs}
 \usepackage[]{natbib}
-\bibliographystyle{apalike}
+\bibliographystyle{aer}
 
 \title{Materials for ECON200: Introductory Macroeconomics}
 \author{Andre R. Neveu}
-\date{2020-05-18}
+\date{2020-05-19}
 
 \begin{document}
 \maketitle
@@ -126,16 +126,14 @@
 \chapter*{Preface}\label{preface}}
 \addcontentsline{toc}{chapter}{Preface}
 
-This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand the economy.
+This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy.
 
 \includegraphics{econ200-book_files/figure-latex/unnamed-chunk-2-1.pdf}
-
-\includegraphics{econ200-book_files/figure-latex/unnamed-chunk-3-1.pdf}
 
 \hypertarget{intro}{%
 \chapter{Introduction}\label{intro}}
 
-\includegraphics{econ200-book_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{econ200-book_files/figure-latex/unnamed-chunk-4-1.pdf}
 
 In the image above, you will see the average annual unemployment rates for four countries. This measures the percent of people who cannot find a job in the group of those people either working or looking for work.
 
@@ -143,27 +141,31 @@ This is measured as
 
 \[ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 \]
 
-You can label chapter and section titles using \texttt{\{\#label\}} after them, e.g., we can reference Chapter \ref{intro}. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \ref{methods}.
+This material will accompany \citep{tw} which will be the primary book for the course. We will also be using \citep{core}, and the other materials compiled by CORE including \citep{espp} and \citep{doing} which act as useful comparisons to the more traditional material presented in \citep{tw}.
+
+In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures \ref{fig:jobs} and \ref{fig:vmt} people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. You can label chapter and section titles using \texttt{\{\#label\}} after them, e.g., we can reference Chapter \ref{intro}. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \ref{methods}.
 
 Figures and tables with captions will be placed in \texttt{figure} and \texttt{table} environments, respectively.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{par}\NormalTok{(}\DataTypeTok{mar =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\FloatTok{.1}\NormalTok{, }\FloatTok{.1}\NormalTok{))}
-\KeywordTok{plot}\NormalTok{(pressure, }\DataTypeTok{type =} \StringTok{'b'}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{19}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/nice-fig-1} 
+{\centering \includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/jobs-1} 
 
 }
 
-\caption{Here is a nice figure!}\label{fig:nice-fig}
+\caption{Jobless Claims Skyrocket in 2020}\label{fig:jobs}
 \end{figure}
 
-Reference a figure by its code chunk label with the \texttt{fig:} prefix, e.g., see Figure \ref{fig:nice-fig}. Similarly, you can reference tables generated from \texttt{knitr::kable()}, e.g., see Table \ref{tab:nice-tab}.
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/vmt-1} 
+
+}
+
+\caption{Travel Collapses in 2020}\label{fig:vmt}
+\end{figure}
+
+Similarly, you can reference tables generated from \texttt{knitr::kable()}, e.g., see Table \ref{tab:nice-tab}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -209,8 +211,6 @@ Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
 \end{tabular}
 \end{table}
 
-You can write citations, too. For example, we are using the \textbf{bookdown} package \citep{R-bookdown} in this sample book, which was built on top of R Markdown and \textbf{knitr} \citep{xie2015}.
-
 \hypertarget{literature}{%
 \chapter{Literature}\label{literature}}
 
@@ -237,6 +237,6 @@ Some \emph{significant} applications are demonstrated in this chapter.
 
 We have finished a nice book.
 
-  \bibliography{book.bib,packages.bib}
+  \bibliography{refs.bib}
 
 \end{document}

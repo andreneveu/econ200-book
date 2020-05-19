@@ -24,7 +24,7 @@
 <meta name="author" content="Andre R. Neveu" />
 
 
-<meta name="date" content="2020-05-18" />
+<meta name="date" content="2020-05-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -163,25 +163,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="intro" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p><img src="econ200-book_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="econ200-book_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>In the image above, you will see the average annual unemployment rates for four countries. This measures the percent of people who cannot find a job in the group of those people either working or looking for work.</p>
 <p>This is measured as</p>
 <p><span class="math display">\[ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 \]</span></p>
-<p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="intro.html#intro">1</a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">3</a>.</p>
+<p>This material will accompany <span class="citation">(Taylor and Weerapana <a href="#ref-tw" role="doc-biblioref">2018</a>)</span> which will be the primary book for the course. We will also be using <span class="citation">(The CORE Team <a href="#ref-core" role="doc-biblioref">2020</a><a href="#ref-core" role="doc-biblioref">c</a>)</span>, and the other materials compiled by CORE including <span class="citation">(The CORE Team <a href="#ref-espp" role="doc-biblioref">2020</a><a href="#ref-espp" role="doc-biblioref">b</a>)</span> and <span class="citation">(The CORE Team <a href="#ref-doing" role="doc-biblioref">2020</a><a href="#ref-doing" role="doc-biblioref">a</a>)</span> which act as useful comparisons to the more traditional material presented in <span class="citation">(Taylor and Weerapana <a href="#ref-tw" role="doc-biblioref">2018</a>)</span>.</p>
+<p>In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures <a href="intro.html#fig:jobs">1.1</a> and <a href="intro.html#fig:vmt">1.2</a> people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="intro.html#intro">1</a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">3</a>.</p>
 <p>Figures and tables with captions will be placed in <code>figure</code> and <code>table</code> environments, respectively.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">.1</span>, <span class="fl">.1</span>))</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">plot</span>(pressure, <span class="dt">type =</span> <span class="st">&#39;b&#39;</span>, <span class="dt">pch =</span> <span class="dv">19</span>)</a></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:nice-fig"></span>
-<img src="econ200-book_files/figure-html/nice-fig-1.png" alt="Here is a nice figure!" width="80%" />
+<div class="figure" style="text-align: center"><span id="fig:jobs"></span>
+<img src="econ200-book_files/figure-html/jobs-1.png" alt="Jobless Claims Skyrocket in 2020" width="80%" />
 <p class="caption">
-Figure 1.1: Here is a nice figure!
+Figure 1.1: Jobless Claims Skyrocket in 2020
 </p>
 </div>
-<p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="intro.html#fig:nice-fig">1.1</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="intro.html#tab:nice-tab">1.1</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">head</span>(iris, <span class="dv">20</span>), <span class="dt">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</a>
-<a class="sourceLine" id="cb2-3" title="3">  <span class="dt">booktabs =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb2-4" title="4">)</a></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:vmt"></span>
+<img src="econ200-book_files/figure-html/vmt-1.png" alt="Travel Collapses in 2020" width="80%" />
+<p class="caption">
+Figure 1.2: Travel Collapses in 2020
+</p>
+</div>
+<p>Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="intro.html#tab:nice-tab">1.1</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">knitr<span class="op">::</span><span class="kw">kable</span>(</a>
+<a class="sourceLine" id="cb1-2" title="2">  <span class="kw">head</span>(iris, <span class="dv">20</span>), <span class="dt">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="dt">booktabs =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb1-4" title="4">)</a></code></pre></div>
 <table>
 <caption><span id="tab:nice-tab">Table 1.1: </span>Here is a nice table!</caption>
 <thead>
@@ -336,16 +341,21 @@ Figure 1.1: Here is a nice figure!
 </tr>
 </tbody>
 </table>
-<p>You can write citations, too. For example, we are using the <strong>bookdown</strong> package <span class="citation">(Xie <a href="#ref-R-bookdown" role="doc-biblioref">2020</a>)</span> in this sample book, which was built on top of R Markdown and <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-xie2015" role="doc-biblioref">2015</a>)</span>.</p>
 
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-xie2015">
-<p>Xie, Yihui. 2015. <em>Dynamic Documents with R and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.org/knitr/">http://yihui.org/knitr/</a>.</p>
+<div id="ref-tw">
+<p>Taylor, John B., and Akila Weerapana. 2018. <em>Principles of Economics</em>. Boston, MA: FlatWorld.</p>
 </div>
-<div id="ref-R-bookdown">
-<p>Xie, Yihui. 2020. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
+<div id="ref-doing">
+<p>The CORE Team. 2020a. <em>Doing Economics</em>. New York, NY: Oxford University Press. <a href="https://www.core-econ.org/doing-economics/index.html">https://www.core-econ.org/doing-economics/index.html</a>.</p>
+</div>
+<div id="ref-espp">
+<p>The CORE Team. 2020b. <em>Economy, Society, &amp; Public Policy</em>. New York, NY: Oxford University Press. <a href="https://www.core-econ.org/espp/index.html">https://www.core-econ.org/espp/index.html</a>.</p>
+</div>
+<div id="ref-core">
+<p>The CORE Team. 2020c. <em>The Economy</em>. New York, NY: Oxford University Press. <a href="https://core-econ.org/the-economy/?lang=en">https://core-econ.org/the-economy/?lang=en</a>.</p>
 </div>
 </div>
             </section>
