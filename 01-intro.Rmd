@@ -1,5 +1,43 @@
 # Introduction {#intro}
 
+```{r, include = FALSE}
+library(readr)
+library(quantmod)
+library(zoo)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(dplyr)
+library(wbstats)
+library(ggplot2)
+library(usmap)
+library(gtrendsR)
+library(tmap)
+library(spData)
+library(pwt9)
+library(googleVis)
+
+```
+	
+```{r, echo = FALSE}
+unems <- wb(country = c("BRA","IND","MEX","USA"),
+               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
+
+ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) + 
+  geom_line(size = 1) +
+  labs(title = "U.S., Brazil, Mexico & India Unemployment Rates by Year", x = "Date", y = "Percent", color = "Country") + 
+  theme_classic()
+
+
+```
+	
+In the image above, you will see the average annual unemployment rates for four countries. This measures the percent of people who cannot find a job in the group of those people either working or looking for work.
+
+This is measured as 
+
+$$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 $$
+
 You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
 
 Figures and tables with captions will be placed in `figure` and `table` environments, respectively.

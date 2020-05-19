@@ -10,9 +10,9 @@ link-citations: yes
 description: "Examining macroeconomic data for introductory students."
 ---
 
-# Introduction
+# Preface {-}
 
-This site will include supplemental material to our regular macroeconomics course readings. 
+This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand the economy.  
 
 ```{r setup, include=FALSE}
 options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
@@ -44,15 +44,23 @@ library(googleVis)
 
 ```
 
+```{r, echo=FALSE}
+jobs <- tq_get("ICSA", 
+                 get = "economic.data",
+                 from = Sys.Date() - lubridate::years(25))
+jobs %>% ggplot(aes(date,price)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Percent", title = "Initial Jobless Claims", color = "Series")
+```
 
 	
-```{r}
-unems <- wb(country = c("BRA","IND","MEX"),
+```{r, echo = FALSE}
+unems <- wb(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
 ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) + 
   geom_line(size = 1) +
-  labs(title = "Brazil, Mexico & India Unemployment", x = "Date", y = "Percent", color = "Country") + 
+  labs(title = "U.S., Brazil, Mexico & India Unemployment Rates by Year", x = "Date", y = "Percent", color = "Country") + 
   theme_classic()
 
 

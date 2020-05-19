@@ -131,15 +131,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Materials for ECON200</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
-<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
-<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
-<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
-<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>2</b> Literature</a></li>
+<li class="chapter" data-level="3" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>3</b> Methods</a></li>
+<li class="chapter" data-level="4" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>4</b> Applications</a><ul>
+<li class="chapter" data-level="4.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>4.1</b> Example one</a></li>
+<li class="chapter" data-level="4.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>4.2</b> Example two</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -166,17 +166,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="author"><em>Andre R. Neveu</em></p>
 <p class="date"><em>2020-05-18</em></p>
 </div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>This site will include supplemental material to our regular macroeconomics course readings.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">unems &lt;-<span class="st"> </span><span class="kw">wb</span>(<span class="dt">country =</span> <span class="kw">c</span>(<span class="st">&quot;BRA&quot;</span>,<span class="st">&quot;IND&quot;</span>,<span class="st">&quot;MEX&quot;</span>),</a>
-<a class="sourceLine" id="cb1-2" title="2">               <span class="dt">indicator =</span> <span class="kw">c</span>(<span class="st">&quot;SL.UEM.TOTL.ZS&quot;</span>), <span class="dt">mrv=</span><span class="dv">30</span>, <span class="dt">gapfill=</span><span class="ot">TRUE</span>, <span class="dt">POSIXct =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">ggplot</span>(unems, <span class="kw">aes</span>(<span class="dt">x =</span> date_ct, <span class="dt">y =</span> value, <span class="dt">color =</span> iso2c)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Brazil, Mexico &amp; India Unemployment&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Percent&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Country&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="st">  </span><span class="kw">theme_classic</span>()</a></code></pre></div>
+<div id="preface" class="section level1 unnumbered">
+<h1>Preface</h1>
+<p>This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand the economy.</p>
 <p><img src="econ200-book_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="econ200-book_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 
 </div>
             </section>
@@ -235,6 +229,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
