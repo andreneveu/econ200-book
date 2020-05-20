@@ -68,12 +68,39 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
 \usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage[]{natbib}
 \bibliographystyle{aer}
 
 \title{Materials for ECON200: Introductory Macroeconomics}
 \author{Andre R. Neveu}
-\date{2020-05-19}
+\date{2020-05-20}
 
 \begin{document}
 \maketitle
@@ -165,10 +192,51 @@ Date & Claims\\
 \end{tabular}
 \end{table}
 
-\hypertarget{literature}{%
-\chapter{Literature}\label{literature}}
+\hypertarget{money}{%
+\chapter{Money Creation}\label{money}}
 
-Here is a review of existing methods.
+\hypertarget{money-debt-credit}{%
+\section{Money, Debt, \& Credit}\label{money-debt-credit}}
+
+Money is an abstract concept, closely linked to the notions of wealth, income, credit, and debt. While most people closely associate money with paper currency issued by governments, it is a much broader social and political construct. As a social construct, money functions as it does---facilitating exchange, measuring value, and storing value---because people agree that it exists. As a political construct, states authorize their money for the payment of taxes and require it to be accepted in payment for debts. In this sense, nations can be considered as the protectors of the debts between occupants of politically delineated boundaries. Money serves several functions. It is a medium of exchange; a unit of account; and a store of value. Money is also a standard of deferred payment.
+
+As a medium of exchange, money is not the thing that is consumed in the process of trade but rather a symbol of agreed upon value. When a person sells their time to an employer, they are usually paid in money and not tangible consumption goods. The purpose of money in this instance is for the worker to ultimately use it in the future for their own consumption. Thus, there is an implicit agreement upon the value of the goods being exchanged (e.g., labor for time). Money also serves as a unit of account; in that it is how value is measured. In this way, money serves as standard of measurement. Thus, value of objects or actions can be measured and compared to one another. This is much the same as measuring height, weight, or speed. To serve as a store of value, money must retain most of its value over time. If one knew that money had no value at some point in the future, there would be no reason to accept it for exchange today. The store of value represents in some ways the trust that we place in one another when exchanging real things with each other over time.\footnote{Real variables would include things that can be measured objectively, like hiring someone to mow my lawn. The labor it takes to mow the lawn is real, as is the machine (i.e., physical capital) used to cut the lawn. The amount of a given currency paid to the worker or to buy the mower is a nominal variable since it is just representing relative value.} Currency issuing nations mandate the terms of payment of taxes, as well as the repayment of debts between a state and its people. Money also serves as a standard of deferred payment. A deferred payment happens when the time of purchase occurs separately from the time of payment. Money serves as the standard with which we value these payments (or debts). Since money represents a standard in inter-temporal commitment (e.g., goods or services are consumed today, but paid for next year), it serves as the object through which our debts and credits are settled with a state or in private transaction.
+
+Money can be used to measure both stock and flow variables. Stock variables---like wealth---are measured at a given point in time. Below, balance sheets represent a typical way of measuring wealth (i.e., net worth) for individuals or capital (i.e., net equity) for companies. Flow variables---like income---are measured over a set length of time. Income might be paid as \$1,000 per week, or \$50,000 per year. Cash flow or income statements are common ways of measuring flow variables.
+
+Debt is a stock concept, representing the sum of obligations owed to others at a given point in time. For example, you might have \$1,200 in accumulated debt at one point in time. Deficits or surpluses are flow concepts represented as the difference between income and expenditures over a set length of time. If you have \$500 a week in income, and \$600 in expenses, the result is a \$100 per-week deficit. In this example, after one week, debt would rise from \$1,200 to \$1,300 as the \$100 deficit is realized. Debts are the accumulated sum of all previous deficits and surpluses. It should be noted that debts do not need to be denominated in terms of an official state-issued currency. You could be in debt to a friend to ``give a ride'', ``move a couch'' or ``buy a drink'' without resorting to dollars or contracts. However, in the U.S., debt is generally measured in dollars. Debt is often inappropriately vilified, when the true concern might be that a person or entity has taken on too much debt. It might be better to think of debts as symbolizing promises of future real activity. It is common that some person or entity takes on more future real obligations than they might be able to deliver. In this case, when the time comes to collect on an earlier promise which cannot be fulfilled, both the debtor and creditor might renegotiate the terms of repayment.\footnote{Social and political norms can help arbitrate the renegotiation under certain circumstances like death. Suppose a person owes their bank \$1,000, but passes away suddenly. The bank might try to recoup their losses by taking over ownership of the person's house or car.} In most circumstances, debts are repaid. In this way, debt represents the social and community ties that take place over time. It is worth noting that whenever there is a delay in completing a transaction, debts are created. It is nearly impossible to think of a world in which debt does not exist or one where it is outlawed. Hence, debt and money represent a special kind of social contract.
+
+As is explained below, people and banks can create money out of thin air. Today, when an obligation which spans time is entered into between two parties, this debt is measured using money. In this way, a \$10 bill represents future real activity that someone will do for you. Cash, somewhat counterintuitively, is a symbol of debt. If you read a U.S. Federal Reserve Note (U.S. paper money) it says on the front, that ``This note is legal tender for all debts, public and private.'' To the person holding physical or electronic cash, it means either you can repay your debts with it, or you can unlock real activity from someone else by getting them to do something for you. A wealthy individual---like Mark Zuckerberg---holds a great deal of influence over what other people will be doing in the future.
+
+\hypertarget{wealth-and-balance-sheets}{%
+\section{Wealth and Balance Sheets}\label{wealth-and-balance-sheets}}
+
+With the concepts of money, debt, and credit introduced, an example can be developed. Imagine that Logan owns several assets. Let's say he has \$1,000 in a checking account, \$60 in cash, a computer he values at \$800, a phone valued at \$500, and a bike worth \$300. These values are what he thinks he can sell these to someone else for. We measure the object's liquidity as the speed you can turn an asset into cash, without significant loss in value. Cash and deposits are generally the most liquid assets, since there is minimal risk that it is not worth exactly what you think it is (e.g., \$100 can be sold for \$100). However, a computer, phone, or bike might not sell right away (or ever) at the values you estimate.
+
+We then examine Logan's liabilities, or obligations to others. If he owes \$1,000 to his credit card company, and has \$3,000 in student loans, he has promised to repay those amounts---likely with interest---at some point in the future. We define wealth as the difference between your total asset value and total liabilities. This difference is called wealth or net worth for individuals and capital or net equity for firms and banks. A balance sheet equates total asset value (usually shown on the left-hand side) with total liabilities plus net worth (usually both shown on the right-hand side).
+
+\[ \text{Assets}=\text{Liabilities}+\text{Net Worth}\]
+
+Using these values for the things Logan owns (\$2,660) and debts he owes to others (\$4,000), he would have a net worth of -\$1,340. We need to emphasize that net worth is the item on our balance sheet that balances the right-hand and left-hand side of Table \ref{tab:break}.
+
+\begin{table}
+
+\caption{\label{tab:break}Logan’s Household Balance Sheet}
+\centering
+\begin{tabular}[t]{>{\bfseries}lr|>{\bfseries}ll}
+\toprule
+Assets &  & Liabilities + Net Worth & \\
+\midrule
+Cash & 60 & Credit Card & 1000\\
+Deposits & 1000 & Student Loan & 3000\\
+Computer & 800 &  & \\
+Phone & 500 &  & \\
+Bike & 300 & Net Worth & -1340\\
+\addlinespace
+\rowcolor[HTML]{666666}  \textcolor{white}{\textbf{Total}} & \textcolor{white}{\textbf{2660}} & \textcolor{white}{\textbf{Total}} & \textcolor{white}{\textbf{2660}}\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \hypertarget{methods}{%
 \chapter{Methods}\label{methods}}
