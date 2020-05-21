@@ -1,0 +1,33 @@
+# Output and Production {#production}
+
+```{r, include = FALSE}
+library(readr)
+library(quantmod)
+library(zoo)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(dplyr)
+library(wbstats)
+library(ggplot2)
+library(usmap)
+library(gtrendsR)
+library(tmap)
+library(spData)
+library(pwt9)
+library(googleVis)
+
+
+```
+
+Measures of output and production
+
+```{r output, echo = FALSE, fig.cap='Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+jobs <- tq_get("GDPC1", 
+                 get = "economic.data",
+                 from = Sys.Date() - lubridate::years(25))
+jobs %>% ggplot(aes(date,price)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Dollars", title = "GDP Per Capita", color = "Series")
+```

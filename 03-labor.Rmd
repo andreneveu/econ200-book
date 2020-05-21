@@ -1,0 +1,35 @@
+# Labor Market Measures {#labor}
+
+The labor market is one of the most important and relevant macroeconomic measures of health.
+
+```{r, include = FALSE}
+library(readr)
+library(quantmod)
+library(zoo)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(dplyr)
+library(wbstats)
+library(ggplot2)
+library(usmap)
+library(gtrendsR)
+library(tmap)
+library(spData)
+library(pwt9)
+library(googleVis)
+
+
+```
+
+Structural and cyclical forces shift labor force participation. 
+
+```{r labor1, echo = FALSE, fig.cap='The Workforce Shows Structural and Cultural Changes', out.width='80%', fig.asp=.75, fig.align='center'}
+jobs <- tq_get("CIVPART", 
+                 get = "economic.data",
+                 from = Sys.Date() - lubridate::years(25))
+jobs %>% ggplot(aes(date,price)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Percent", title = "Labor Force Participation Rate", color = "Series")
+```
