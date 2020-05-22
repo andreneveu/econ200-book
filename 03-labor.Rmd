@@ -1,6 +1,5 @@
 # Labor Market Measures {#labor}
 
-The labor market is one of the most important and relevant macroeconomic measures of health.
 
 ```{r, include = FALSE}
 library(readr)
@@ -19,11 +18,20 @@ library(tmap)
 library(spData)
 library(pwt9)
 library(googleVis)
-
+library(scales)
+library(tibbletime)
+library(data.table)
+library(cowplot)
 
 ```
 
-Structural and cyclical forces shift labor force participation. 
+## Labor Force Participation
+
+The labor market is one of the most important and relevant macroeconomic measures of health.[^13] There are several different measures of labor market health. First, we might like to know what portion of eligible workers are engaged in either working or job search. We measure this using the **labor force participation rate** (LFP). The LFP tends to rise and fall with long-term economic trends, like women entering the workforce or the reduction in manpower necessary for manufacturing. We calculate the LFP as:
+
+$$ \text{LFP} = \frac{\text{Unemployed}+\text{Employed}}{\text{Eligible Population}} \times 100 $$
+
+We can see that structural forces shift labor force participation (Figure \@ref(fig:labor1)). However, LFP does change with cyclical events, such as the case with the recent COVID-19 pandemic.  
 
 ```{r labor1, echo = FALSE, fig.cap='The Workforce Shows Structural and Cultural Changes', out.width='80%', fig.asp=.75, fig.align='center'}
 jobs <- tq_get("CIVPART", 
@@ -31,5 +39,220 @@ jobs <- tq_get("CIVPART",
                  from = Sys.Date() - lubridate::years(25))
 jobs %>% ggplot(aes(date,price)) + 
   geom_line() + 
-  labs(x = "Date", y = "Percent", title = "Labor Force Participation Rate", color = "Series")
+  labs(x = "Date", y = "Percent", title = "Labor Force Participation Rate", color = "Series") + 
+  theme_bw()
 ```
+
+## Job Growth
+
+Another way to look at the health of the labor market is to look at job growth. Job growth in the U.S. had been going very strong until the COVID-19 pandemic in early 2020. Note that in Figure \@ref(fig:neat) there had been positive gains in growth for over ten years! Prior to the COVID-19 pandemic, healthy job growth was considered to be about 200,000 jobs per month. 
+
+```{r neat, echo=FALSE, warning=FALSE, fig.cap='Job Gains Had Persisted for a Historically Long Stretch', out.width='80%', fig.asp=.75, fig.align='center'}
+# Set up tickers
+tickers<- c("PAYEMS", # nonfarm payroll employment
+            "UNRATE", # unemployment rate
+            "CIVPART", # civilian labor force pariticipation rate
+            "EMRATIO", # employment-to-population ratio
+            "NROU"  ) # estimate of natural rate of unemployment from U.S. Congressional Budget Office
+mynames <- c("Nonfarm Payroll Employment",
+            "Unemployment Rate",
+            "Labor Force Participation Rate",
+            "Employment-to-Population Ratio",
+            "Natural Rate of Unemployment")
+
+mytickers<- data.frame(symbol=tickers,varname=mynames,  stringsAsFactors =FALSE)
+
+
+# download data via FRED 
+df<-tq_get(tickers,                         # get selected symbols
+            get="economic.data",             # use FRED
+            from="1948-01-01")               # go from 1954 forward
+
+df <- left_join(df, mytickers, by="symbol")
+
+df %>% select(-varname) %>% 
+  spread(symbol,price) -> df2
+
+
+# Convert quarterly natural rate (NROU) data to monthly data by "filling down" using na.locf
+
+df2 %>% 
+  mutate(NROU2=na.locf(NROU,na.rm=F)) %>% 
+  mutate(UGAP2=UNRATE-NROU2,
+         dj=c(NA,diff(PAYEMS)),
+         # create indicators for shaded plot
+         up=ifelse(UNRATE>NROU2,UNRATE,NROU2),
+         down=ifelse(UNRATE<NROU2,UNRATE,NROU2)) -> df2
+
+# Set up recession indicators
+
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+ggplot(data=filter(df2,year(date)>1949 & year(date)<2020), 
+       aes(x=date,y=dj,
+           color=ifelse(dj>0,"up m/m", 
+                        ifelse(dj==0,"no change", "down m/m")),
+           fill=ifelse(dj>0,"up m/m", 
+                       ifelse(dj==0,"no change", "down m/m"))))+
+  geom_col(alpha=0.85,color=NA)+
+  #eom_rug()+
+  scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+  theme_minimal()+
+  scale_color_manual(values=c("#d73027","#4575b4","#4575b4"),
+                     name="Monthly change")+
+  scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
+                    name="Monthly change")+
+  geom_rug(sides="b")+
+  scale_x_date(lim=as.Date(c("1950-01-01","2019-12-31")),date_breaks="5 years",date_labels="%Y")+
+  #scale_x_date(date_labels="%Y",date_breaks="1 year")+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.subtitle=element_text(size=14,face="italic",color="darkgray"),
+        plot.title=element_text(size=14,face="bold",color="black"))+
+  labs(x="",y="",
+       title="Before COVID-19, the U.S. experienced \n strong month-over-month job growth",
+       subtitle="Monthly change in U.S. nonfarm employment (1000s, SA)",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [PAYEMS]")
+```
+
+The COVID-19 pandemic is unlike anything we have ever experienced in the U.S., so much so that the scale of all previous changes appear nearly irrelevant. Note that Figure \@ref(fig:neat2) is the same as Figure \@ref(fig:neat) but only includes the more recent four months of data.
+
+```{r neat2, echo=FALSE, warning=FALSE, fig.cap='The COVID-19 Job Losses Are Stunning', out.width='80%', fig.asp=.75, fig.align='center'}
+ggplot(data=filter(df2,year(date)>1949), 
+       aes(x=date,y=dj,
+           color=ifelse(dj>0,"up m/m", 
+                        ifelse(dj==0,"no change", "down m/m")),
+           fill=ifelse(dj>0,"up m/m", 
+                       ifelse(dj==0,"no change", "down m/m"))))+
+  geom_col(alpha=0.85,color=NA)+
+  #eom_rug()+
+  scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+  theme_minimal()+
+  scale_color_manual(values=c("#d73027","#4575b4","#4575b4"),
+                     name="Monthly change")+
+  scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
+                    name="Monthly change")+
+  geom_rug(sides="b")+
+  scale_x_date(lim=as.Date(c("1950-01-01","2020-4-30")),date_breaks="5 years",date_labels="%Y")+
+  #scale_x_date(date_labels="%Y",date_breaks="1 year")+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.subtitle=element_text(size=14,face="italic",color="darkgray"),
+        plot.title=element_text(size=14,face="bold",color="black"))+
+  labs(x="",y="",
+       title="COVID-19 is unlike anything we have ever experienced",
+       subtitle="Monthly change in U.S. nonfarm employment (1000s, SA)",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics")
+```
+
+## Unemployment Rates
+
+The unemployment rate is a different measurement than labor-force participation. Unemployment rates only look at the percentage of the labor force that cannot find work. The labor force is the numerator in the calculation of the LFP, and sometimes when people lose a job they leave the labor force entirely. This complicates our perception of the health of the labor market when some people are both losing jobs--leaving the numerator of the unemployment rate--and also leaving the labor force. In mid-2020, people are both filing for unemployment--which means they stay in the labor force--and dropping out of the labor force. 
+
+$$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 $$
+
+The unemployment rate is often compared to a conceptual measure known as the **natural rate of unemployment**. This natural rate is what economists estimate the unemployment rate would have to be in order to keep the economy producing at it's potential. **Potential output** is somewhat confusing, as it really means the country is producing goods and services at a *sustainable* level and not the *absolute maximum*. You might think of potential output more like a pace you could sustain while jogging, but not an all-out sprint! The estimated natural rate of unemployment considers what we have talked about so far. Strong participation, healthy job growth, and availability of jobs making for a *healthy* labor market. 
+
+We can see in Figure \@ref(tab:neat3) that the unemployment rate in early 2020 was at an historic low, and was well below what economists considered *natural*. When the economy is not doing so well, the labor market tends to be one of the most important signals. Thus, the unemployment rate usually rises rapidly during **recessions** when the economy and output is contracting.
+
+```{r neat3, echo=FALSE, warning=FALSE, fig.cap='Unemployment Rates Had Been Historically Low', out.width='80%', fig.asp=.75, fig.align='center'}
+
+ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(color="black")+
+  geom_line(linetype=2,aes(y=NROU2))+
+  geom_ribbon(aes(ymin=UNRATE,ymax=down),fill="#d73027",alpha=0.5)+
+  geom_ribbon(aes(ymin=UNRATE,ymax=up),fill="#4575b4",alpha=0.5)  +
+  scale_x_date(date_breaks="5 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  theme_minimal(base_size=8)+
+  theme(legend.position="top",
+        plot.caption=element_text(hjust=0),
+        plot.subtitle=element_text(face="italic"),
+        plot.title=element_text(size=16,face="bold"))+
+  labs(x="",y="Percent",
+       title="U.S. Unemployment Rate vs Natural Rate of Unemployment",
+       subtitle="Solid line Unemployment Rate, dotted line Long-term Natural Rate of Unemployment",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Data Source: U.S. Bureau of Labor Statistics, U.S. Congressional Budget Office,shaded bars NBER Recessions\n Natural Rate of Unemployment (Long-Term) retrieved May 21, 2020")+
+  geom_rug(aes(color=ifelse(UNRATE<=NROU2,"Below or Equal","Above")),sides="b")+
+  scale_color_manual(values=c("#d73027","#4575b4"),name="Unemployment Rate Above/Below Natural Rate ")
+```
+
+## Long-Run Trends v. Short-Run Changes 
+
+```{r neat4, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
+
+ggplot(data=df2, aes(x=date,y=CIVPART,label=CIVPART))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05)+theme_minimal()+
+  geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=-.25)+
+  scale_x_date(date_breaks="2 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.subtitle=element_text(face="italic"),
+        plot.title=element_text(size=16,face="bold"))+
+  labs(x="",y="",title="Labor Force Participation Rate",
+       subtitle="in percentage points (seasonally adjusted)",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 21, 2020.")+
+  coord_cartesian(xlim=as.Date(c("2000-01-01","2020-04-01")),ylim=c(60,68))
+```
+
+
+```{r neat5, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
+
+dfs<-fread("https://download.bls.gov/pub/time.series/ln/ln.series")
+
+codes<-dfs[grepl("Participation Rate", series_title) &   # use regular expression
+             ages_code==33 &                             # only ags 25 to 54
+             periodicity_code =="M" &                    # only monthly frequence
+             seasonal=="S"                               # only Seasonally adjusted
+           ]
+codes$var <- c("All","Men","Women")
+codes <- select(codes, series_id, series_title, var)
+
+# get all data (large file)
+df.all<-fread("https://download.bls.gov/pub/time.series/ln/ln.data.1.AllData")
+
+# filter data
+dfp<-df.all[series_id %in% codes$series_id,]
+#create date variable
+dfp[,month:=as.numeric(substr(dfp$period,2,3))]
+dfp$date<- as.Date(ISOdate(dfp$year,dfp$month,1) ) #set up date variable
+
+dfp$v<-as.numeric(dfp$value)
+# join on variable names, drop unused variables, convert to data.table
+left_join(dfp, select(codes, series_id,series_title,var), by="series_id") %>%  select(series_id,series_title,var,date,v) %>% data.table() -> dfp
+
+ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05)+theme_minimal()+
+  geom_point(data=filter(dfp,date==max(dfp$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(dfp,date==max(dfp$date)),fontface="bold",size=4,nudge_y=-1.8)+
+  scale_x_date(date_breaks="5 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  #scale_color_mycol(palette="main",discrete=T,name="Labor force participation rate (%)")+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.subtitle=element_text(face="italic"),
+        plot.title=element_text(size=16,face="bold"))+
+  labs(x="",y="",title="Labor Force Participation Rate: Prime Working Age (25-54)",
+       subtitle="in percentage points (seasonally adjusted)",
+       caption="@lenkiefer Source: U.S. Bureau of Labor Statistics, shaded bars NBER Recessions")
+```
+
+[^13]: Many of the graphs here are adapted from code available from Len Kiefer's blog post [http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/](http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/). 

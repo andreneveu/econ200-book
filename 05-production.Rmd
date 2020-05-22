@@ -29,5 +29,6 @@ jobs <- tq_get("GDPC1",
                  from = Sys.Date() - lubridate::years(25))
 jobs %>% ggplot(aes(date,price)) + 
   geom_line() + 
-  labs(x = "Date", y = "Dollars", title = "GDP Per Capita", color = "Series")
+  labs(x = "Date", y = "Dollars", title = "GDP Per Capita", color = "Series") + 
+  theme_bw()
 ```

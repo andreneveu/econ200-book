@@ -4,7 +4,22 @@
 library(knitr)
 library(kableExtra)
 library(scales)
-library(tippy)
+library(readr)
+library(quantmod)
+library(zoo)
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(dplyr)
+library(wbstats)
+library(ggplot2)
+library(usmap)
+library(gtrendsR)
+library(tmap)
+library(spData)
+library(pwt9)
+library(googleVis)
 ```
 
 ## Money, Debt, \& Credit 
@@ -12,6 +27,17 @@ library(tippy)
 Money is an abstract concept, closely linked to the notions of wealth, income, credit, and debt. While most people closely associate money with paper currency issued by governments, it is a much broader social and political construct. As a social construct, money functions as it does—facilitating exchange, measuring value, and storing value—because people agree that it exists. As a political construct, states authorize their money for the payment of taxes and require it to be accepted in payment for debts. In this sense, nations can be considered as the protectors of the debts between occupants of politically delineated boundaries. Money serves several functions. It is a medium of exchange; a unit of account; and a store of value. Money is also a standard of deferred payment. 
 
 As a **medium of exchange** money is not the thing that is consumed in the process of trade but rather a *symbol* of agreed upon value. When a person sells their time to an employer, they are usually paid in money and not tangible consumption goods. The purpose of money in this instance is for the worker to ultimately use it in the future for their own consumption. Thus, there is an implicit agreement upon the value of the goods being exchanged (e.g., labor for time). Money also serves as a **unit of account**; in that it is how value is measured. In this way, money serves as standard of measurement. Thus, value of objects or actions can be measured and compared to one another. This is much the same as measuring height, weight, or speed. To serve as a **store of value**, money must retain most of its value over time. If one knew that money had no value at some point in the future, there would be no reason to accept it for exchange today. The store of value represents in some ways the trust that we place in one another when exchanging real things with each other over time.[^1] Currency issuing nations mandate the terms of payment of taxes, as well as the repayment of debts between a state and its people. Money also serves as a **standard of deferred payment**. A deferred payment happens when the time of purchase occurs separately from the time of payment. Money serves as the standard with which we value these payments (or debts). Since money represents a standard in inter-temporal commitment (e.g., goods or services are consumed today, but paid for next year), it serves as the object through which our debts and credits are settled with a state or in private transaction.
+
+
+```{r money, echo = FALSE, fig.cap='The Money Supply Has Grown Over Time', out.width='80%', fig.asp=.75, fig.align='center'}
+jobs <- tq_get("M1", 
+                 get = "economic.data",
+                 from = Sys.Date() - lubridate::years(25))
+jobs %>% ggplot(aes(date,price)) + 
+  geom_line() + 
+  labs(x = "Date", y = "Millions of Dollars", title = "M1 Money Supply: Deposits + Currency in Circulation", color = "Series") + 
+  theme_bw()
+```
 
 Money can be used to measure both stock and flow variables. **Stock variables**—like wealth—are measured at a given point in time. Below, **balance sheets** represent a typical way of measuring wealth (i.e., net worth) for individuals or capital (i.e., net equity) for companies. **Flow variables**—like income—are measured over a set length of time. Income might be paid as \$1,000 per week, or $50,000 per year. Cash flow or income statements are common ways of measuring flow variables.
 

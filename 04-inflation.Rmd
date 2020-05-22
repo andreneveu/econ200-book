@@ -33,10 +33,11 @@ jobs <- tq_get("CPIAUCSL",
                  from = Sys.Date() - lubridate::years(25))
 jobs %>% ggplot(aes(date,price)) + 
   geom_line() + 
-  labs(x = "Date", y = "Index 1982-1984 = 100", title = "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average", color = "Series")
+  labs(x = "Date", y = "Index 1982-1984 = 100", title = "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average", color = "Series") + 
+  theme_bw()
 ```
 
-```{r cpi2, echo = FALSE, fig.cap='Inflation Rates Are Measuring the Change in the Price Level', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r cpi2, echo = FALSE, warning=FALSE, fig.cap='Inflation Rates Are Measuring the Change in the Price Level', out.width='80%', fig.asp=.75, fig.align='center'}
 jobs <- tq_get("CPIAUCSL", 
                  get = "economic.data",
                  from = Sys.Date() - lubridate::years(25)) %>% 
@@ -44,5 +45,6 @@ jobs <- tq_get("CPIAUCSL",
 
 jobs %>% ggplot(aes(date,pct_chg)) + 
   geom_line() + 
-  labs(x = "Date", y = "Percent Change", title = "Inflation Using CPI for All Urban Consumers: Year-Over-Year Percent Change", color = "Series")
+  labs(x = "Date", y = "Percent Change", title = "Inflation Using CPI for All Urban Consumers: Year-Over-Year Percent Change", color = "Series") + 
+  theme_bw()
 ```
