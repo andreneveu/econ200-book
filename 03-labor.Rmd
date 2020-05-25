@@ -34,13 +34,51 @@ $$ \text{LFP} = \frac{\text{Unemployed}+\text{Employed}}{\text{Eligible Populati
 We can see that structural forces shift labor force participation (Figure \@ref(fig:labor1)). However, LFP does change with cyclical events, such as the case with the recent COVID-19 pandemic.  
 
 ```{r labor1, echo = FALSE, fig.cap='The Workforce Shows Structural and Cultural Changes', out.width='80%', fig.asp=.75, fig.align='center'}
+
+# Set up recession indicators
+
+
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
+enddate <- round_date(Sys.Date())
+
 jobs <- tq_get("CIVPART", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-jobs %>% ggplot(aes(date,price)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Percent", title = "Labor Force Participation Rate", color = "Series") + 
-  theme_bw()
+                 from = startdate)
+
+jobs %>% 
+  spread(symbol,price) -> jobs
+
+ggplot(data = jobs, aes(x=date,y=CIVPART,label=CIVPART)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) + 
+  theme_light() +
+  geom_point(data=filter(jobs,date==max(jobs$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(jobs,date==max(jobs$date)),fontface="bold",size=4,nudge_y=-.25)+
+  scale_x_date(date_breaks="2 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16))+
+  labs(x="",y="",title="Labor Force Participation Rate",
+       subtitle="Percentage Points (Seasonally Adjusted)",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 25, 2020.")+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(jobs$CIVPART)),ceiling(max(jobs$CIVPART))))
+
 ```
 
 ## Job Growth
@@ -54,17 +92,18 @@ tickers<- c("PAYEMS", # nonfarm payroll employment
             "CIVPART", # civilian labor force pariticipation rate
             "EMRATIO", # employment-to-population ratio
             "NROU"  ) # estimate of natural rate of unemployment from U.S. Congressional Budget Office
+
 mynames <- c("Nonfarm Payroll Employment",
             "Unemployment Rate",
             "Labor Force Participation Rate",
             "Employment-to-Population Ratio",
             "Natural Rate of Unemployment")
 
-mytickers<- data.frame(symbol=tickers,varname=mynames,  stringsAsFactors =FALSE)
+mytickers<- data.frame(symbol=tickers, varname=mynames,  stringsAsFactors = FALSE)
 
 
 # download data via FRED 
-df<-tq_get(tickers,                         # get selected symbols
+df <-tq_get(tickers,                         # get selected symbols
             get="economic.data",             # use FRED
             from="1948-01-01")               # go from 1954 forward
 
@@ -84,22 +123,8 @@ df2 %>%
          up=ifelse(UNRATE>NROU2,UNRATE,NROU2),
          down=ifelse(UNRATE<NROU2,UNRATE,NROU2)) -> df2
 
-# Set up recession indicators
 
-recessions.df = read.table(textConnection(
-  "Peak, Trough
-  1948-11-01, 1949-10-01
-  1953-07-01, 1954-05-01
-  1957-08-01, 1958-04-01
-  1960-04-01, 1961-02-01
-  1969-12-01, 1970-11-01
-  1973-11-01, 1975-03-01
-  1980-01-01, 1980-07-01
-  1981-07-01, 1982-11-01
-  1990-07-01, 1991-03-01
-  2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01"), sep=',',
-  colClasses=c('Date', 'Date'), header=TRUE)
+
 
 ggplot(data=filter(df2,year(date)>1949 & year(date)<2020), 
        aes(x=date,y=dj,
@@ -110,7 +135,7 @@ ggplot(data=filter(df2,year(date)>1949 & year(date)<2020),
   geom_col(alpha=0.85,color=NA)+
   #eom_rug()+
   scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
-  theme_minimal()+
+  theme_light()+
   scale_color_manual(values=c("#d73027","#4575b4","#4575b4"),
                      name="Monthly change")+
   scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
@@ -120,8 +145,7 @@ ggplot(data=filter(df2,year(date)>1949 & year(date)<2020),
   #scale_x_date(date_labels="%Y",date_breaks="1 year")+
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
-        plot.subtitle=element_text(size=14,face="italic",color="darkgray"),
-        plot.title=element_text(size=14,face="bold",color="black"))+
+        plot.title=element_text(size=16,color="black"))+
   labs(x="",y="",
        title="Before COVID-19, the U.S. experienced \n strong month-over-month job growth",
        subtitle="Monthly change in U.S. nonfarm employment (1000s, SA)",
@@ -140,7 +164,7 @@ ggplot(data=filter(df2,year(date)>1949),
   geom_col(alpha=0.85,color=NA)+
   #eom_rug()+
   scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
-  theme_minimal()+
+  theme_light()+
   scale_color_manual(values=c("#d73027","#4575b4","#4575b4"),
                      name="Monthly change")+
   scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
@@ -150,13 +174,13 @@ ggplot(data=filter(df2,year(date)>1949),
   #scale_x_date(date_labels="%Y",date_breaks="1 year")+
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
-        plot.subtitle=element_text(size=14,face="italic",color="darkgray"),
-        plot.title=element_text(size=14,face="bold",color="black"))+
+        plot.title=element_text(size=16,color="black")) +
   labs(x="",y="",
        title="COVID-19 is unlike anything we have ever experienced",
        subtitle="Monthly change in U.S. nonfarm employment (1000s, SA)",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics")
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [PAYEMS]")
 ```
+
 
 ## Unemployment Rates
 
@@ -170,48 +194,34 @@ We can see in Figure \@ref(tab:neat3) that the unemployment rate in early 2020 w
 
 ```{r neat3, echo=FALSE, warning=FALSE, fig.cap='Unemployment Rates Had Been Historically Low', out.width='80%', fig.asp=.75, fig.align='center'}
 
-ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE))+
+ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE,label=UNRATE))+
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(color="black")+
   geom_line(linetype=2,aes(y=NROU2))+
+  geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.45)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=+.5)+
+  geom_point(data=filter(df2,date=="2020-02-01"),size=2,alpha=0.45)+
+  geom_text(data=filter(df2,date=="2020-02-01"),fontface="bold",size=4,nudge_y=-.5)+
+   annotate(geom="text", x=as.Date("2015-01-01"), y=3, label="Feb '20:",
+              color="black", fontface="bold", size=4) +
+
   geom_ribbon(aes(ymin=UNRATE,ymax=down),fill="#d73027",alpha=0.5)+
   geom_ribbon(aes(ymin=UNRATE,ymax=up),fill="#4575b4",alpha=0.5)  +
   scale_x_date(date_breaks="5 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
-  theme_minimal(base_size=8)+
+  theme_light(base_size=8)+
   theme(legend.position="top",
         plot.caption=element_text(hjust=0),
-        plot.subtitle=element_text(face="italic"),
-        plot.title=element_text(size=16,face="bold"))+
+        plot.title=element_text(size=16,color="black"))+
   labs(x="",y="Percent",
        title="U.S. Unemployment Rate vs Natural Rate of Unemployment",
        subtitle="Solid line Unemployment Rate, dotted line Long-term Natural Rate of Unemployment",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Data Source: U.S. Bureau of Labor Statistics, U.S. Congressional Budget Office,shaded bars NBER Recessions\n Natural Rate of Unemployment (Long-Term) retrieved May 21, 2020")+
+       caption="Original figure by Len Kiefer, adapted by Andre R. Neveu. \nData Source: U.S. Bureau of Labor Statistics, U.S. Congressional Budget Office, shaded bars NBER Recessions \nNatural Rate of Unemployment (Long-Term) retrieved May 25, 2020")+
   geom_rug(aes(color=ifelse(UNRATE<=NROU2,"Below or Equal","Above")),sides="b")+
-  scale_color_manual(values=c("#d73027","#4575b4"),name="Unemployment Rate Above/Below Natural Rate ")
+  scale_color_manual(values=c("#d73027","#4575b4"),name="Unemployment Rate vs. Natural Rate ")
 ```
 
 ## Long-Run Trends v. Short-Run Changes 
-
-```{r neat4, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
-
-ggplot(data=df2, aes(x=date,y=CIVPART,label=CIVPART))+
-  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
-  geom_line(size=1.05)+theme_minimal()+
-  geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=-.25)+
-  scale_x_date(date_breaks="2 years",date_labels="%Y")+
-  scale_y_continuous(sec.axis=dup_axis())+
-  theme(legend.position="none",
-        plot.caption=element_text(hjust=0),
-        plot.subtitle=element_text(face="italic"),
-        plot.title=element_text(size=16,face="bold"))+
-  labs(x="",y="",title="Labor Force Participation Rate",
-       subtitle="in percentage points (seasonally adjusted)",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 21, 2020.")+
-  coord_cartesian(xlim=as.Date(c("2000-01-01","2020-04-01")),ylim=c(60,68))
-```
-
 
 ```{r neat5, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
 
@@ -246,13 +256,37 @@ ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
   scale_x_date(date_breaks="5 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   #scale_color_mycol(palette="main",discrete=T,name="Labor force participation rate (%)")+
+  theme_light() +
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
-        plot.subtitle=element_text(face="italic"),
-        plot.title=element_text(size=16,face="bold"))+
+        plot.title=element_text(size=16,color="black"))+
   labs(x="",y="",title="Labor Force Participation Rate: Prime Working Age (25-54)",
        subtitle="in percentage points (seasonally adjusted)",
-       caption="@lenkiefer Source: U.S. Bureau of Labor Statistics, shaded bars NBER Recessions")
+       caption="Original figure by Len Kiefer, adapted by Andre R. Neveu. \nData Source: U.S. Bureau of Labor Statistics, shaded bars NBER Recessions") +
+    scale_color_manual(values=c("#666666","#3C738B","#450084"),name="Group")
 ```
+
+```{r neat6, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
+ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05)+theme_minimal()+
+  geom_point(data=filter(dfp,date==max(dfp$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(dfp,date==max(dfp$date)),fontface="bold",size=4,nudge_y=-1.8)+
+  scale_x_date(date_breaks="5 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  #scale_color_mycol(palette="main",discrete=T,name="Labor force participation rate (%)")+
+  theme_light() + 
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x="",y="",title="Labor Force Participation Rate: Prime Working Age (25-54)",
+       subtitle="in percentage points (seasonally adjusted)",
+       caption="Original figure by Len Kiefer, adapted by Andre R. Neveu. \nData Source: U.S. Bureau of Labor Statistics, shaded bars NBER Recessions") +
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(70,100)) +
+    scale_color_manual(values=c("#666666","#3C738B","#450084"),name="Group")
+
+
+```
+
 
 [^13]: Many of the graphs here are adapted from code available from Len Kiefer's blog post [http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/](http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/). 
