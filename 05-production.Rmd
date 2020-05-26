@@ -24,11 +24,80 @@ library(googleVis)
 Measures of output and production
 
 ```{r output, echo = FALSE, fig.cap='Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
-jobs <- tq_get("GDPC1", 
+
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
+enddate <- round_date(Sys.Date())
+
+df <- tq_get("GDPC1", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-jobs %>% ggplot(aes(date,price)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Dollars", title = "GDP Per Capita", color = "Series") + 
-  theme_bw()
+                 from = startdate)
+
+df %>% 
+  spread(symbol,price) %>%
+  mutate(GDP = GDPC1) %>%
+  mutate(date = date + months(3)) -> df
+
+df %>% ggplot(aes(x=date,y=GDP,label=GDP)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="U.S. Gross Domestic Product: Quarterly",
+       subtitle="Billions of Chained 2012 Dollars (SA)",
+       caption="Source: U.S. Bureau of Economic Analysis [GDPC1]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$GDP)),ceiling(max(df$GDP))))
 ```
+
+
+
+```{r output2, echo = FALSE, fig.cap='Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+
+df <- tq_get("GDPC1", 
+                 get = "economic.data",
+                 from = startdate - lubridate::years(1))
+
+df %>% 
+  spread(symbol,price) %>%
+  mutate(pct_chg = (GDPC1/lag(GDPC1,4) - 1) * 100) %>%
+  mutate(date = date + months(3)) %>%
+  filter(complete.cases(.)) -> df
+
+df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Growth Rate of U.S. Gross Domestic Product",
+       subtitle="Year over year percentage change",
+       caption="Source: U.S. Bureau of Economic Analysis [GDPC1]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate - lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
+```
+
+

@@ -47,23 +47,74 @@ Something important about Figure \@ref(fig:unems) is that we can see in some cou
 In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures \@ref(fig:jobs) and \@ref(fig:vmt) people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. 
 
 ```{r jobs, echo = FALSE, fig.cap='Jobless Claims Skyrocket in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
+
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
+enddate <- round_date(Sys.Date())
+
+
 jobs <- tq_get("ICSA", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-jobs %>% ggplot(aes(date,price/1000)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Thousands of Claims", title = "Initial Jobless Claims", color = "Series") + 
-  theme_bw()
+                 from = startdate)
+
+jobs %>% 
+  spread(symbol,price) %>%
+  mutate(ICSA = ICSA/1000) -> jobs
+
+jobs %>% ggplot(aes(x=date,y=ICSA,label=ICSA)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Initial Jobless Claims",
+       subtitle="Monthly unemployment claims in U.S. nonfarm employment (1000s, SA)",
+       caption="Source: U.S. Bureau of Labor Statistics [ICSA]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(jobs$ICSA)),ceiling(max(jobs$ICSA))))
 ```
 
 ```{r vmt, echo = FALSE, fig.cap='Travel Collapses in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
 vmt <- tq_get("TRFVOLUSM227SFWA", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-vmt %>% ggplot(aes(date,price)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Millions of Miles", title = "Vehicle Miles Traveled", color = "Series") + 
-  theme_bw()
+                 from = startdate)
+vmt %>% 
+  spread(symbol,price) %>%
+  mutate(MMT = TRFVOLUSM227SFWA) -> vmt
+
+vmt %>% ggplot(aes(x=date,y=MMT,label=MMT)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +  
+      theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Vehicle Miles Traveled",
+       subtitle="Millions of Miles (SA)",
+       caption="Source: U.S. Department of Transportation [TRFVOLUSM227SFWA]"
+  ) + 
+  coord_cartesian(xlim=c(as.Date("2000-01-01"),enddate),ylim=c(floor(min(vmt$MMT)),ceiling(max(vmt$MMT))))
+
 ```
 
 Table \@ref(tab:initial) shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before. 
@@ -71,11 +122,11 @@ Table \@ref(tab:initial) shows the initial claims data for the past fifteen week
 ```{r initial, echo=FALSE}
 jobs2 <- jobs %>% 
   rename(Date = date,
-         Claims = price)
+         Claims = ICSA)
 
 knitr::kable(
-  tail(jobs2[,2:3], 15), caption = 'The Last 15 Weeks of Initial Unemployment Claims',
-  booktabs = TRUE
+  tail(jobs2, 20), caption = "Initial Unemployment Claims for Most Recent 20 Weeks \n (1000's)", booktabs = TRUE, 
+  format.args = list(big.mark = ",", scientific = FALSE)
 )
 ```
 

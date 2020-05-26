@@ -27,24 +27,77 @@ For many goods--like tuition--the price level just seems to rise over time. Here
 
 $$\left(\frac{255.902}{254.943} - 1\right)\times 100 = 0.4\%$$
 
+    
 ```{r cpi1, echo = FALSE, fig.cap='Price Levels Generally Rise Over Time', out.width='80%', fig.asp=.75, fig.align='center'}
-jobs <- tq_get("CPIAUCSL", 
+
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
+enddate <- round_date(Sys.Date())
+
+df <- tq_get("CPIAUCSL", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25))
-jobs %>% ggplot(aes(date,price)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Index 1982-1984 = 100", title = "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average", color = "Series") + 
-  theme_bw()
+                 from = startdate)
+
+df %>% 
+  spread(symbol,price) %>%
+  mutate(CPI = CPIAUCSL) -> df
+
+df %>% ggplot(aes(x=date,y=CPI,label=CPI)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Consumer Price Index for All Urban Consumers: \nAll Items in U.S. City Average",
+       subtitle="Index 1982-1984 = 100",
+       caption="Source: U.S. Bureau of Labor Statistics [CPIAUCSL]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$CPI)),ceiling(max(df$CPI))))
+
 ```
 
 ```{r cpi2, echo = FALSE, warning=FALSE, fig.cap='Inflation Rates Are Measuring the Change in the Price Level', out.width='80%', fig.asp=.75, fig.align='center'}
-jobs <- tq_get("CPIAUCSL", 
+df <- tq_get("CPIAUCSL", 
                  get = "economic.data",
-                 from = Sys.Date() - lubridate::years(25)) %>% 
-  mutate(pct_chg = (price/lag(price,12) - 1) * 100)
+                 from = startdate - lubridate::years(1))
 
-jobs %>% ggplot(aes(date,pct_chg)) + 
-  geom_line() + 
-  labs(x = "Date", y = "Percent Change", title = "Inflation Using CPI for All Urban Consumers: Year-Over-Year Percent Change", color = "Series") + 
-  theme_bw()
+df %>% 
+  spread(symbol,price) %>%
+  mutate(pct_chg = (CPIAUCSL/lag(CPIAUCSL,12) - 1) * 100) %>%
+  filter(complete.cases(.)) -> df
+
+df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="CPI Inflation\nCPI for All Urban Consumers: All Items in U.S. City Average",
+       subtitle="Percent Change From Previous Year",
+       caption="Source: U.S. Bureau of Labor Statistics [CPIAUCSL]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate-lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
+
 ```

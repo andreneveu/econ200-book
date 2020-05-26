@@ -30,6 +30,7 @@ library(quantmod)
 library(dplyr)
 library(wbstats)
 library(ggplot2)
+library(gganimate)
 
 ```
 
@@ -37,15 +38,24 @@ library(ggplot2)
 
 	
 ```{r, echo = FALSE}
-unems <- wb(country = c("BRA","IND","MEX","USA"),
+df <- wb(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
-ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) + 
-  geom_line(size = 1) +
-  labs(title = "U.S., Brazil, Mexico & India Unemployment Rates by Year", x = "Date", y = "Percent", color = "Country") + 
-  theme_classic()
+p<- ggplot(df, aes(x = date_ct, y = value, color = iso2c)) + 
+  geom_line(size = 1.05) +
+  theme_light() +
+      theme(legend.position="right",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Country", 
+       title="Brazil, India, Mexico, & U.S. Unemployment Rates",
+       subtitle="Annual Average Percent of Labor Force Unemployed",
+       caption="Source: World Bank")
 
-
+anim <- p + geom_point() +
+  transition_reveal(date_ct)
+anim
+anim_save("nationunem.mp4")
 ```
 	
 

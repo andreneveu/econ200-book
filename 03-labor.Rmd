@@ -56,19 +56,19 @@ recessions.df = read.table(textConnection(
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
 enddate <- round_date(Sys.Date())
 
-jobs <- tq_get("CIVPART", 
+df <- tq_get("CIVPART", 
                  get = "economic.data",
                  from = startdate)
 
-jobs %>% 
-  spread(symbol,price) -> jobs
+df %>% 
+  spread(symbol,price) -> df
 
-ggplot(data = jobs, aes(x=date,y=CIVPART,label=CIVPART)) + 
+ggplot(data = df, aes(x=date,y=CIVPART,label=CIVPART)) + 
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05) + 
   theme_light() +
-  geom_point(data=filter(jobs,date==max(jobs$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(jobs,date==max(jobs$date)),fontface="bold",size=4,nudge_y=-.25)+
+  geom_point(data=filter(df,date==max(df$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(df,date==max(df$date)),fontface="bold",size=4,nudge_y=-.25)+
   scale_x_date(date_breaks="2 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   theme(legend.position="none",
@@ -76,8 +76,8 @@ ggplot(data = jobs, aes(x=date,y=CIVPART,label=CIVPART)) +
         plot.title=element_text(size=16))+
   labs(x="",y="",title="Labor Force Participation Rate",
        subtitle="Percentage Points (Seasonally Adjusted)",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 25, 2020.")+
-    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(jobs$CIVPART)),ceiling(max(jobs$CIVPART))))
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 25, 2020.") +
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$CIVPART)),ceiling(max(df$CIVPART))))
 
 ```
 
@@ -190,7 +190,7 @@ $$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text
 
 The unemployment rate is often compared to a conceptual measure known as the **natural rate of unemployment**. This natural rate is what economists estimate the unemployment rate would have to be in order to keep the economy producing at it's potential. **Potential output** is somewhat confusing, as it really means the country is producing goods and services at a *sustainable* level and not the *absolute maximum*. You might think of potential output more like a pace you could sustain while jogging, but not an all-out sprint! The estimated natural rate of unemployment considers what we have talked about so far. Strong participation, healthy job growth, and availability of jobs making for a *healthy* labor market. 
 
-We can see in Figure \@ref(tab:neat3) that the unemployment rate in early 2020 was at an historic low, and was well below what economists considered *natural*. When the economy is not doing so well, the labor market tends to be one of the most important signals. Thus, the unemployment rate usually rises rapidly during **recessions** when the economy and output is contracting.
+We can see in Figure \@ref(fig:neat3) that the unemployment rate in early 2020 was at an historic low, and was well below what economists considered *natural*. When the economy is not doing so well, the labor market tends to be one of the most important signals. Thus, the unemployment rate usually rises rapidly during **recessions** when the economy and output is contracting.
 
 ```{r neat3, echo=FALSE, warning=FALSE, fig.cap='Unemployment Rates Had Been Historically Low', out.width='80%', fig.asp=.75, fig.align='center'}
 
@@ -268,13 +268,13 @@ ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
 
 ```{r neat6, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
 ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
-  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05)+theme_minimal()+
   geom_point(data=filter(dfp,date==max(dfp$date)),size=2,alpha=0.75)+
   geom_text(data=filter(dfp,date==max(dfp$date)),fontface="bold",size=4,nudge_y=-1.8)+
   scale_x_date(date_breaks="5 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
-  #scale_color_mycol(palette="main",discrete=T,name="Labor force participation rate (%)")+
   theme_light() + 
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
