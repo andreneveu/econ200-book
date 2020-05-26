@@ -24,13 +24,19 @@ library(googleVis)
 In Figure \@ref(fig:unems) below, you will see the unemployment rate for four countries averaged over each year. The unemployment rate measures the percent of people who cannot find a job in the group of those people either working or looking for work. It seems like a mouthful, but we are estimating the proportion of people who are technically in the *labor force*. 
 
 ```{r unems, echo = FALSE, fig.cap='Unemployment Rates Around the World', out.width='80%', fig.asp=.75, fig.align='center'}
-unems <- wb(country = c("BRA","IND","MEX","USA"),
+df <- wb(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
-ggplot(unems, aes(x = date_ct, y = value, color = iso2c)) + 
-  geom_line(size = 1) +
-  labs(title = "U.S., Brazil, Mexico & India Unemployment Rates by Year", x = "Date", y = "Percent", color = "Country") + 
-  theme_bw()
+ggplot(df, aes(x = date_ct, y = value, color = iso2c)) + 
+  geom_line(size = 1.05) +
+  theme_light() +
+      theme(legend.position="right",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Country", 
+       title="Brazil, India, Mexico, & U.S. Unemployment Rates",
+       subtitle="Annual Average Percent of Labor Force Unemployed",
+       caption="Source: World Bank")
 
 
 ```
@@ -67,15 +73,15 @@ startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
 enddate <- round_date(Sys.Date())
 
 
-jobs <- tq_get("ICSA", 
+df <- tq_get("ICSA", 
                  get = "economic.data",
                  from = startdate)
 
-jobs %>% 
+df %>% 
   spread(symbol,price) %>%
-  mutate(ICSA = ICSA/1000) -> jobs
+  mutate(ICSA = ICSA/1000) -> df
 
-jobs %>% ggplot(aes(x=date,y=ICSA,label=ICSA)) + 
+df %>% ggplot(aes(x=date,y=ICSA,label=ICSA)) + 
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
     xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05) +
@@ -89,7 +95,7 @@ jobs %>% ggplot(aes(x=date,y=ICSA,label=ICSA)) +
        caption="Source: U.S. Bureau of Labor Statistics [ICSA]"
 ) + 
     scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
-    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(jobs$ICSA)),ceiling(max(jobs$ICSA))))
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$ICSA)),ceiling(max(df$ICSA))))
 ```
 
 ```{r vmt, echo = FALSE, fig.cap='Travel Collapses in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
@@ -120,12 +126,12 @@ vmt %>% ggplot(aes(x=date,y=MMT,label=MMT)) +
 Table \@ref(tab:initial) shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before. 
 
 ```{r initial, echo=FALSE}
-jobs2 <- jobs %>% 
+df2 <- df %>% 
   rename(Date = date,
          Claims = ICSA)
 
 knitr::kable(
-  tail(jobs2, 20), caption = "Initial Unemployment Claims for Most Recent 20 Weeks \n (1000's)", booktabs = TRUE, 
+  tail(df2, 20), caption = "Initial Unemployment Claims for Most Recent 20 Weeks \n (1000's)", booktabs = TRUE, 
   format.args = list(big.mark = ",", scientific = FALSE)
 )
 ```

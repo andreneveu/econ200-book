@@ -53,7 +53,9 @@ p<- ggplot(df, aes(x = date_ct, y = value, color = iso2c)) +
        caption="Source: World Bank")
 
 anim <- p + geom_point() +
-  transition_reveal(date_ct)
+  transition_reveal(date_ct) + 
+  enter_fade()+
+  exit_fade()
 anim
 anim_save("nationunem.mp4")
 ```
