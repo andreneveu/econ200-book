@@ -250,7 +250,7 @@ left_join(dfp, select(codes, series_id,series_title,var), by="series_id") %>%  s
 
 ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
-  geom_line(size=1.05)+theme_minimal()+
+  geom_line(size=1.05)+
   geom_point(data=filter(dfp,date==max(dfp$date)),size=2,alpha=0.75)+
   geom_text(data=filter(dfp,date==max(dfp$date)),fontface="bold",size=4,nudge_y=-1.8)+
   scale_x_date(date_breaks="5 years",date_labels="%Y")+
@@ -266,11 +266,11 @@ ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
     scale_color_manual(values=c("#666666","#3C738B","#450084"),name="Group")
 ```
 
-```{r neat6, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r neat6, echo=FALSE, warning=FALSE, fig.cap='The Change is Simiilar Across Gender', out.width='80%', fig.asp=.75, fig.align='center'}
 ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
     xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
-  geom_line(size=1.05)+theme_minimal()+
+  geom_line(size=1.05)+
   geom_point(data=filter(dfp,date==max(dfp$date)),size=2,alpha=0.75)+
   geom_text(data=filter(dfp,date==max(dfp$date)),fontface="bold",size=4,nudge_y=-1.8)+
   scale_x_date(date_breaks="5 years",date_labels="%Y")+
@@ -287,6 +287,26 @@ ggplot(data=dfp, aes(x=date,y=v,color=var, label=var))+
 
 
 ```
+
+```{r neat7, echo=FALSE, warning=FALSE, fig.cap='Expectedly, the Percentage of All People Employed Has Fallen', out.width='80%', fig.asp=.75, fig.align='center'}
+
+
+ggplot(data=df2, aes(x=date,y=EMRATIO,label=EMRATIO))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05)+theme_light()+
+  geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.75)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=-.25)+
+  scale_x_date(date_breaks="2 years",date_labels="%Y")+
+  scale_y_continuous(sec.axis=dup_axis())+
+  theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16))+
+  labs(x="",y="",title="Employment-to-Population Ratio ",
+       subtitle="Measured monthly in percentage points (seasonally adjusted)",
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [EMRATIO].\n Shaded bars NBER Recessions, May 25, 2020.")+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df2$EMRATIO)),ceiling(max(df2$EMRATIO))))
+```
+
 
 
 [^13]: Many of the graphs here are adapted from code available from Len Kiefer's blog post [http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/](http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/). 

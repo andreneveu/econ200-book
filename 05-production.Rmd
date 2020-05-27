@@ -101,3 +101,63 @@ df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) +
 ```
 
 
+```{r output3, echo = FALSE, fig.cap='Per Capita GDP Might be More Important', out.width='80%', fig.asp=.75, fig.align='center'}
+
+df <- tq_get("A939RX0Q048SBEA", 
+                 get = "economic.data",
+                 from = startdate)
+
+df %>% 
+  spread(symbol,price) %>%
+  mutate(GDP = A939RX0Q048SBEA) %>%
+  mutate(date = date + months(3)) -> df
+
+df %>% ggplot(aes(x=date,y=GDP,label=GDP)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Per Capita U.S. Gross Domestic Product: Quarterly",
+       subtitle="Billions of Chained 2012 Dollars (SA)",
+       caption="Source: U.S. Bureau of Economic Analysis [A939RX0Q048SBEA]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$GDP)),ceiling(max(df$GDP))))
+```
+
+```{r output4, echo = FALSE, fig.cap='Per Capita Also Exhibits Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+
+df <- tq_get("A939RX0Q048SBEA", 
+                 get = "economic.data",
+                 from = startdate - lubridate::years(1))
+
+df %>% 
+  spread(symbol,price) %>%
+  mutate(pct_chg = (A939RX0Q048SBEA/lag(A939RX0Q048SBEA,4) - 1) * 100) %>%
+  mutate(date = date + months(3)) %>%
+  filter(complete.cases(.)) -> df
+
+df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) + 
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.05) +
+    theme_light() +
+    theme(legend.position="none",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="Growth Rate of Per Capita U.S. Gross Domestic Product",
+       subtitle="Year over year percentage change",
+       caption="Source: U.S. Bureau of Economic Analysis [A939RX0Q048SBEA]"
+) + 
+    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+    coord_cartesian(xlim=c(startdate - lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
+```
+```
+
+
+
