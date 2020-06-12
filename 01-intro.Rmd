@@ -50,7 +50,7 @@ $$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text
 
 Something important about Figure \@ref(fig:unems) is that we can see in some countries the unemployment rate is much higher than in other countries. Partially this is because we do not all use the same measurements for those who are either technically unemployed or working. However, if we assume countries do a consistent job in measuring these rates, the changes are still somewhat accurate. For example, in the United States a monthly survey of about 60,000 households counts those considered unemployed not just as those people collecting unemployment payments, but also includes all those people who have actively sought work in the past four weeks [(Bureau of Labor Statistics)](https://www.bls.gov/cps/cps_htgm.htm). 
 
-In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figures \@ref(fig:jobs) and \@ref(fig:vmt) people who are newly jobless and travel in the U.S. have moved dramatically in opposite directions. 
+In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figure \@ref(fig:jobs) there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure \@ref(fig:vmt)). 
 
 ```{r jobs, echo = FALSE, fig.cap='Jobless Claims Skyrocket in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
 
@@ -66,7 +66,8 @@ recessions.df = read.table(textConnection(
   1981-07-01, 1982-11-01
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01"), sep=',',
+  2007-12-01, 2009-06-01
+  2020-02-01, 2020-06-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")

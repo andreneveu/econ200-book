@@ -50,7 +50,8 @@ recessions.df = read.table(textConnection(
   1981-07-01, 1982-11-01
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01"), sep=',',
+  2007-12-01, 2009-06-01
+  2020-02-01, 2020-06-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
@@ -68,7 +69,7 @@ ggplot(data = df, aes(x=date,y=CIVPART,label=CIVPART)) +
   geom_line(size=1.05) + 
   theme_light() +
   geom_point(data=filter(df,date==max(df$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(df,date==max(df$date)),fontface="bold",size=4,nudge_y=-.25)+
+  geom_text(data=filter(df,date==max(df$date)),fontface="bold",size=4,nudge_x=-365)+
   scale_x_date(date_breaks="2 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   theme(legend.position="none",
@@ -76,7 +77,7 @@ ggplot(data = df, aes(x=date,y=CIVPART,label=CIVPART)) +
         plot.title=element_text(size=16))+
   labs(x="",y="",title="Labor Force Participation Rate",
        subtitle="Percentage Points (Seasonally Adjusted)",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, May 25, 2020.") +
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics.\n Shaded bars NBER Recessions Civilian Labor Force Participation Rate, June 12, 2020.") +
     coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$CIVPART)),ceiling(max(df$CIVPART))))
 
 ```
@@ -152,10 +153,10 @@ ggplot(data=filter(df2,year(date)>1949 & year(date)<2020),
        caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [PAYEMS]")
 ```
 
-The COVID-19 pandemic is unlike anything we have ever experienced in the U.S., so much so that the scale of all previous changes appear nearly irrelevant. Note that Figure \@ref(fig:neat2) is the same as Figure \@ref(fig:neat) but only includes the more recent four months of data.
+The COVID-19 pandemic is unlike anything we have ever experienced in the U.S., so much so that the scale of all previous changes appear nearly irrelevant. Note that Figure \@ref(fig:neat2) is the same as Figure \@ref(fig:neat) but focuses on the periods since the start of the Great Recession in late 2007.
 
 ```{r neat2, echo=FALSE, warning=FALSE, fig.cap='The COVID-19 Job Losses Are Stunning', out.width='80%', fig.asp=.75, fig.align='center'}
-ggplot(data=filter(df2,year(date)>1949), 
+ggplot(data=filter(df2,year(date)>2006), 
        aes(x=date,y=dj,
            color=ifelse(dj>0,"up m/m", 
                         ifelse(dj==0,"no change", "down m/m")),
@@ -170,7 +171,7 @@ ggplot(data=filter(df2,year(date)>1949),
   scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
                     name="Monthly change")+
   geom_rug(sides="b")+
-  scale_x_date(lim=as.Date(c("1950-01-01","2020-4-30")),date_breaks="5 years",date_labels="%Y")+
+  scale_x_date(lim=as.Date(c("2007-01-01","2020-06-01")),date_breaks="1 years",date_labels="%Y")+
   #scale_x_date(date_labels="%Y",date_breaks="1 year")+
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
@@ -199,7 +200,7 @@ ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE,label=UNRATE))+
   geom_line(color="black")+
   geom_line(linetype=2,aes(y=NROU2))+
   geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.45)+
-  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=+.5)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_x=-1000)+
   geom_point(data=filter(df2,date=="2020-02-01"),size=2,alpha=0.45)+
   geom_text(data=filter(df2,date=="2020-02-01"),fontface="bold",size=4,nudge_y=-.5)+
    annotate(geom="text", x=as.Date("2015-01-01"), y=3, label="Feb '20:",
@@ -216,7 +217,7 @@ ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE,label=UNRATE))+
   labs(x="",y="Percent",
        title="U.S. Unemployment Rate vs Natural Rate of Unemployment",
        subtitle="Solid line Unemployment Rate, dotted line Long-term Natural Rate of Unemployment",
-       caption="Original figure by Len Kiefer, adapted by Andre R. Neveu. \nData Source: U.S. Bureau of Labor Statistics, U.S. Congressional Budget Office, shaded bars NBER Recessions \nNatural Rate of Unemployment (Long-Term) retrieved May 25, 2020")+
+       caption="Original figure by Len Kiefer, adapted by Andre R. Neveu. \nData Source: U.S. Bureau of Labor Statistics, U.S. Congressional Budget Office, shaded bars NBER Recessions \nNatural Rate of Unemployment (Long-Term) retrieved June 12, 2020")+
   geom_rug(aes(color=ifelse(UNRATE<=NROU2,"Below or Equal","Above")),sides="b")+
   scale_color_manual(values=c("#d73027","#4575b4"),name="Unemployment Rate vs. Natural Rate ")
 ```
@@ -295,7 +296,7 @@ ggplot(data=df2, aes(x=date,y=EMRATIO,label=EMRATIO))+
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05)+theme_light()+
   geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_y=-.25)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_x=-365)+
   scale_x_date(date_breaks="2 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   theme(legend.position="none",
@@ -303,7 +304,7 @@ ggplot(data=df2, aes(x=date,y=EMRATIO,label=EMRATIO))+
         plot.title=element_text(size=16))+
   labs(x="",y="",title="Employment-to-Population Ratio ",
        subtitle="Measured monthly in percentage points (seasonally adjusted)",
-       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [EMRATIO].\n Shaded bars NBER Recessions, May 25, 2020.")+
+       caption="Original code by Len Kiefer, adapted by Andre R. Neveu. Source: U.S. Bureau of Labor Statistics [EMRATIO].\n Shaded bars NBER Recessions, June 12, 2020.")+
     coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df2$EMRATIO)),ceiling(max(df2$EMRATIO))))
 ```
 
