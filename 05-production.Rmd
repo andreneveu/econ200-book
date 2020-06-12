@@ -158,6 +158,88 @@ df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) +
     scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
     coord_cartesian(xlim=c(startdate - lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
 ```
+
+```{r output5, echo = FALSE, fig.cap='Per Capita Also Exhibits Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+
+startdate <- round_date(Sys.Date() - lubridate::years(70),"month")
+enddate <- round_date(Sys.Date() + lubridate::years(5))
+
+df <- tq_get(c("GDPC1","GDPPOT"), 
+             get = "economic.data",
+             from = startdate,
+             to = enddate)
+
+df %>% 
+  spread(symbol,price) %>%
+  rename(GDP = GDPC1) %>%
+  mutate(date = date + months(3)) -> df
+
+
+df %>%
+  mutate(post08 = ifelse((date < "2009-06-01"),0,1)) %>%
+  mutate(pct_chg = ((GDPPOT/lag(GDPPOT,1))-1)) %>%
+  group_by(post08) %>%
+  mutate(avggrowth = mean(pct_chg, na.rm=TRUE),
+         rollgrowth = rollmean(pct_chg, 48, na.pad = TRUE, align = "right"),
+         Count = 1:n(),
+         endval = last(GDPPOT),
+         min1 = min(rollgrowth, na.rm=TRUE)) %>% 
+  transform(endval = min(endval),
+            mingrowth = max(min1),
+            avggrowth = max(avggrowth)) %>% 
+  mutate(newpost08 = ifelse(post08 == 1,endval*(1+avggrowth)^Count,GDPPOT),
+         minpost08 = ifelse(post08 == 1,endval*(1+mingrowth)^Count,GDPPOT)) -> df2
+
+
+ggplot(data=filter(df2,!is.na(GDPPOT)), aes(x=date,y=GDP,label=GDP)) + 
+  geom_line(linetype=2,aes(y=GDPPOT))+
+  geom_line(aes(y=newpost08), linetype=2, color = "red")+
+  geom_line(aes(y=minpost08), linetype=2, color = "green")+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+                                                   xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.1, na.rm=TRUE) +
+  theme_light(base_size=8) +
+  theme(legend.position="top",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="U.S. Gross Domestic Product: Quarterly and \nAlternative Potential Scenarios",
+       subtitle="Black line, billions of chained 2012 dollars (SA), dashed shows potential GDP \nRed line, GDP potential if growth at pre-2008 average \nGreen line, GDP potential if growth at worst 12-year average",
+       caption="Source: U.S. Bureau of Economic Analysis [GDPC1], Congressional Budget Office [GDPPOT]/n
+       Note: Growth rates calculated as average one period percentage change."
+  ) + 
+  scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+  coord_cartesian(xlim=c(startdate,enddate),ylim=c(floor(min(df$GDP)),ceiling(max(df$GDP))))
+
+
+```
+
+```{r output6, echo = FALSE, fig.cap='Per Capita Also Exhibits Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+
+df %>% 
+  mutate(gdpgrowth = (((GDP/lag(GDP,1))^4-1)*100),
+         potgrowth = (((GDPPOT/lag(GDPPOT,1))^4-1)*100)) -> df3
+
+startdate = as.Date("1990-01-01")
+range = c(floor(min(df3$gdpgrowth,na.rm=TRUE)),ceiling(max(df3$gdpgrowth,na.rm=TRUE)))
+
+ggplot(data=filter(df3,!is.na(potgrowth) & date > startdate), aes(x=date,y=gdpgrowth,label=gdpgrowth)) + 
+  geom_line(linetype=1,size=1.1,color="red",aes(y=potgrowth))+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+                                                   xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.1, na.rm=TRUE) +
+  theme_light(base_size=8) +
+  theme(legend.position="top",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="U.S. Gross Domestic Product: Quarterly Growth",
+       subtitle="Black line, annualized growth rate (SA), Red line, annualized growth rate of potential GDP",
+       caption="Source: U.S. Bureau of Economic Analysis [GDPC1], Congressional Budget Office [GDPPOT]"
+  ) + 
+  scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
+  coord_cartesian(xlim=c(startdate,enddate),ylim=range)
+
 ```
 
 
