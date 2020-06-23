@@ -500,7 +500,7 @@ knitr::kable(
   kable_styling(full_width = F) %>%
   column_spec(1, bold = T) %>%
   column_spec(3, bold = T, border_left = T) %>%
-  row_spec(4, bold = T, color = "black", background = "#D3D3D3") %>%
+  row_spec(4, bold = T, color = "black", background = "#B599CE") %>%
   add_header_above(c("Assets" = 2, "Liabilities + Net Worth" = 2))
 
 ```
@@ -779,7 +779,7 @@ text_tbl <- data.frame(
 text_tbl <- dplyr::mutate_if(text_tbl, is.numeric, format_dol_fun)
 
 knitr::kable(
-  text_tbl, "html", caption = "** Callisto Bank: Balance Sheet**", booktabs = TRUE, col.names = c("","","",""),
+  text_tbl, "html", caption = "**Callisto Bank: Balance Sheet**", booktabs = TRUE, col.names = c("","","",""),
   format.args = list(big.mark = ",", scientific = FALSE)
   ) %>%
   kable_styling(full_width = F) %>%
