@@ -8,6 +8,7 @@ bibliography: [refs.bib]
 biblio-style: aer
 link-citations: yes
 description: "Examining macroeconomic data for introductory students."
+always_allow_html: yes
 ---
 
 # Preface {-}
@@ -27,21 +28,26 @@ if(length(new.packages)) install.packages(new.packages)
 ```{r, include = FALSE}
 library(readr)
 library(quantmod)
+library(tidyquant)
+library(lubridate)
 library(dplyr)
 library(wbstats)
 library(ggplot2)
 library(gganimate)
-
+library(gifski)
 ```
 
 
 
 	
 ```{r, echo = FALSE}
-df <- wb(country = c("BRA","IND","MEX","USA"),
-               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
+# df <- wb(country = c("BRA","IND","MEX","USA"),
+#                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
-p<- ggplot(df, aes(x = date_ct, y = value, color = iso2c)) + 
+df.wbnew <- wb_data(country = c("BRA","IND","MEX","USA"),
+               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, date_as_class_date = TRUE, return_wide = FALSE)
+
+p<- ggplot(df.wbnew, aes(x = date, y = value, color = iso2c)) + 
   geom_line(size = 1.05) +
   theme_light() +
       theme(legend.position="right",
@@ -52,12 +58,14 @@ p<- ggplot(df, aes(x = date_ct, y = value, color = iso2c)) +
        subtitle="Annual Average Percent of Labor Force Unemployed",
        caption="Source: World Bank")
 
-anim <- p + geom_point() +
-  transition_reveal(date_ct) + 
-  enter_fade()+
-  exit_fade()
-anim
-anim_save("nationunem.mp4")
+# anim <- p + geom_point() +
+#   transition_reveal(date) + 
+#   enter_fade()+
+#   exit_fade()
+# anim
+# 
+# animate(anim, duration = 10, fps = 10, renderer = gifski_renderer())
+# anim_save("nationunem.mp4")
 ```
 	
 

@@ -43,7 +43,7 @@ recessions.df = read.table(textConnection(
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
   2007-12-01, 2009-06-01
-  2020-02-01, 2020-06-01"), sep=',',
+  2020-02-01, 2020-12-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
@@ -54,7 +54,7 @@ df <- tq_get("CPIAUCSL",
                  from = startdate)
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(CPI = CPIAUCSL) -> df
 
 df %>% ggplot(aes(x=date,y=CPI,label=CPI)) + 
@@ -81,7 +81,7 @@ df <- tq_get("CPIAUCSL",
                  from = startdate - lubridate::years(1))
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(pct_chg = (CPIAUCSL/lag(CPIAUCSL,12) - 1) * 100) %>%
   filter(complete.cases(.)) -> df
 

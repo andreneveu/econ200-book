@@ -24,10 +24,12 @@ library(googleVis)
 In Figure \@ref(fig:unems) below, you will see the unemployment rate for four countries averaged over each year. The unemployment rate measures the percent of people who cannot find a job in the group of those people either working or looking for work. It seems like a mouthful, but we are estimating the proportion of people who are technically in the *labor force*. 
 
 ```{r unems, echo = FALSE, fig.cap='Unemployment Rates Around the World', out.width='80%', fig.asp=.75, fig.align='center'}
-df <- wb(country = c("BRA","IND","MEX","USA"),
-               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
+# df <- wb(country = c("BRA","IND","MEX","USA"),
+#                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
+df.wbnew <- wb_data(country = c("BRA","IND","MEX","USA"),
+               indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, date_as_class_date = TRUE, return_wide = FALSE)
 
-ggplot(df, aes(x = date_ct, y = value, color = iso2c)) + 
+ggplot(df.wbnew, aes(x = date, y = value, color = iso2c)) + 
   geom_line(size = 1.05) +
   theme_light() +
       theme(legend.position="right",
@@ -67,7 +69,7 @@ recessions.df = read.table(textConnection(
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
   2007-12-01, 2009-06-01
-  2020-02-01, 2020-06-01"), sep=',',
+  2020-02-01, 2020-12-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
@@ -77,10 +79,15 @@ enddate <- round_date(Sys.Date())
 df <- tq_get("ICSA", 
                  get = "economic.data",
                  from = startdate)
+# 
+# df %>% 
+#   spread(symbol,price) %>%
+#   mutate(ICSA = ICSA/1000) -> df
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(ICSA = ICSA/1000) -> df
+
 
 df %>% ggplot(aes(x=date,y=ICSA,label=ICSA)) + 
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
@@ -104,7 +111,7 @@ vmt <- tq_get("TRFVOLUSM227SFWA",
                  get = "economic.data",
                  from = startdate)
 vmt %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(MMT = TRFVOLUSM227SFWA) -> vmt
 
 vmt %>% ggplot(aes(x=date,y=MMT,label=MMT)) + 
@@ -132,7 +139,7 @@ df2 <- df %>%
          Claims = ICSA)
 
 knitr::kable(
-  tail(df2, 20), caption = "Initial Unemployment Claims for Most Recent 20 Weeks \n (1000's)", booktabs = TRUE, 
+  tail(df2, 50), caption = "Initial Unemployment Claims for Most Recent 50 Weeks \n (1000's)", booktabs = TRUE, 
   format.args = list(big.mark = ",", scientific = FALSE)
 )
 ```

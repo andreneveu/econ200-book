@@ -51,7 +51,7 @@ recessions.df = read.table(textConnection(
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
   2007-12-01, 2009-06-01
-  2020-02-01, 2020-06-01"), sep=',',
+  2020-02-01, 2020-12-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
@@ -62,14 +62,14 @@ df <- tq_get("CIVPART",
                  from = startdate)
 
 df %>% 
-  spread(symbol,price) -> df
+    pivot_wider(names_from=symbol, values_from=price) -> df
 
 ggplot(data = df, aes(x=date,y=CIVPART,label=CIVPART)) + 
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05) + 
   theme_light() +
   geom_point(data=filter(df,date==max(df$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(df,date==max(df$date)),fontface="bold",size=4,nudge_x=-365)+
+  geom_text(data=filter(df,date==max(df$date)),fontface="bold",size=4,nudge_y=0.4, nudge_x=60)+
   scale_x_date(date_breaks="2 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   theme(legend.position="none",
@@ -296,7 +296,7 @@ ggplot(data=df2, aes(x=date,y=EMRATIO,label=EMRATIO))+
   geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak, xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05)+theme_light()+
   geom_point(data=filter(df2,date==max(df2$date)),size=2,alpha=0.75)+
-  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_x=-365)+
+  geom_text(data=filter(df2,date==max(df2$date)),fontface="bold",size=4,nudge_x=60,nudge_y=0.5)+
   scale_x_date(date_breaks="2 years",date_labels="%Y")+
   scale_y_continuous(sec.axis=dup_axis())+
   theme(legend.position="none",

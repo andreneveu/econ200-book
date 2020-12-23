@@ -38,7 +38,7 @@ recessions.df = read.table(textConnection(
   1990-07-01, 1991-03-01
   2001-03-01, 2001-11-01
   2007-12-01, 2009-06-01
-  2020-02-01, 2020-06-01"), sep=',',
+  2020-02-01, 2020-12-01"), sep=',',
   colClasses=c('Date', 'Date'), header=TRUE)
 
 startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
@@ -49,7 +49,7 @@ df <- tq_get("GDPC1",
                  from = startdate)
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(GDP = GDPC1) %>%
   mutate(date = date + months(3)) -> df
 
@@ -79,7 +79,7 @@ df <- tq_get("GDPC1",
                  from = startdate - lubridate::years(1))
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(pct_chg = (GDPC1/lag(GDPC1,4) - 1) * 100) %>%
   mutate(date = date + months(3)) %>%
   filter(complete.cases(.)) -> df
@@ -109,7 +109,7 @@ df <- tq_get("A939RX0Q048SBEA",
                  from = startdate)
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(GDP = A939RX0Q048SBEA) %>%
   mutate(date = date + months(3)) -> df
 
@@ -137,7 +137,7 @@ df <- tq_get("A939RX0Q048SBEA",
                  from = startdate - lubridate::years(1))
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   mutate(pct_chg = (A939RX0Q048SBEA/lag(A939RX0Q048SBEA,4) - 1) * 100) %>%
   mutate(date = date + months(3)) %>%
   filter(complete.cases(.)) -> df
@@ -170,7 +170,7 @@ df <- tq_get(c("GDPC1","GDPPOT"),
              to = enddate)
 
 df %>% 
-  spread(symbol,price) %>%
+  pivot_wider(names_from=symbol, values_from=price) %>% 
   rename(GDP = GDPC1) %>%
   mutate(date = date + months(3)) -> df
 
