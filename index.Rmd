@@ -1,5 +1,6 @@
 --- 
-title: "Materials for ECON200: Introductory Macroeconomics"
+title: "Materials for Macroeconomics"
+subtitle: "Intro, Intermediate, and Advanced"
 author: "Andre R. Neveu"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -7,42 +8,29 @@ documentclass: book
 bibliography: [refs.bib]
 biblio-style: aer
 link-citations: yes
-description: "Examining macroeconomic data for introductory students."
+description: "Examining macroeconomic data for economics students."
 always_allow_html: yes
 ---
 
 # Preface {-}
 
-This site will include supplemental material to our regular macroeconomics course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy. This material will accompany @tw which will be the primary book for the course. We will also be using @core, and the other materials compiled by CORE including *Economy, Society, & Public Policy* [@espp] and *Doing Economics* [@doing] which act as useful comparisons to the more traditional material presented in @tw. 
+This site will include supplemental material to our regular course readings. Mostly this will be used to show you how we can use publicly available data to create tables and figures to help us understand and analyze the economy. In introductory courses, this material will accompany @tw which will be the primary book for the course. We will also be using @core, and the other materials compiled by CORE including *Economy, Society, & Public Policy* [@espp] and *Doing Economics* [@doing] which act as useful comparisons to the more traditional material presented in @tw. For intermediate courses, the CORE resources will be utilized, along with @jones. 
 
 ```{r setup, include=FALSE}
 options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
 
 # Code to automatically pull in and install missing packages
-list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis")
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
-```
+lapply(list.of.packages, require, character.only=TRUE)
 
-
-```{r, include = FALSE}
-library(readr)
-library(quantmod)
-library(tidyquant)
-library(lubridate)
-library(dplyr)
-library(wbstats)
-library(ggplot2)
-library(gganimate)
-library(gifski)
 ```
 
 
 
 	
 ```{r, echo = FALSE}
-# df <- wb(country = c("BRA","IND","MEX","USA"),
-#                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 
 df.wbnew <- wb_data(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, date_as_class_date = TRUE, return_wide = FALSE)
@@ -57,15 +45,17 @@ p<- ggplot(df.wbnew, aes(x = date, y = value, color = iso2c)) +
        title="Brazil, India, Mexico, & U.S. Unemployment Rates",
        subtitle="Annual Average Percent of Labor Force Unemployed",
        caption="Source: World Bank")
+# p
 
-# anim <- p + geom_point() +
-#   transition_reveal(date) + 
-#   enter_fade()+
-#   exit_fade()
-# anim
-# 
-# animate(anim, duration = 10, fps = 10, renderer = gifski_renderer())
-# anim_save("nationunem.mp4")
+## In order to make pdf, you have to eliminate the animation here and put "p" above to render the plot
+anim <- p + geom_point() +
+  transition_reveal(date) +
+  enter_fade()+
+  exit_fade()
+anim
+
+animate(anim, duration = 10, fps = 10, end_pause = 30, renderer = gifski_renderer())
+anim_save("nationunem.mp4")
 ```
 	
 

@@ -1,24 +1,10 @@
 # Inflation {#inflation}
 
 ```{r, include = FALSE}
-library(readr)
-library(quantmod)
-library(zoo)
-library(tidyquant)
-library(tidyverse)
-library(lubridate)
-library(reshape2)
-library(dplyr)
-library(wbstats)
-library(ggplot2)
-library(usmap)
-library(gtrendsR)
-library(tmap)
-library(spData)
-library(pwt9)
-library(googleVis)
-
-
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(list.of.packages, require, character.only=TRUE)
 ```
 
 Prices for the goods and services we consume change over time. Recall that a price that you pay for a good is simply a *nominal* value, and does not directly take into account the amount of *real* work that would be performed to purchase a good. For example, if you were living in the fictional country of Titan, and a bag of chips there cost 30 units, that information is not particularly informative by itself. First, you want to know if "30 units" is a lot. If a typical wage for an hour of work was "3 units" then chips seem expensive costing you about 10 hours of work! However, if a typical wage was "300 units" for an hour of work, then chips are cheap, earned with about six minutes of work! Thus, what is most important to you is the real value.
@@ -30,24 +16,9 @@ $$\left(\frac{255.902}{254.943} - 1\right)\times 100 = 0.4\%$$
     
 ```{r cpi1, echo = FALSE, fig.cap='Price Levels Generally Rise Over Time', out.width='80%', fig.asp=.75, fig.align='center'}
 
-recessions.df = read.table(textConnection(
-  "Peak, Trough
-  1948-11-01, 1949-10-01
-  1953-07-01, 1954-05-01
-  1957-08-01, 1958-04-01
-  1960-04-01, 1961-02-01
-  1969-12-01, 1970-11-01
-  1973-11-01, 1975-03-01
-  1980-01-01, 1980-07-01
-  1981-07-01, 1982-11-01
-  1990-07-01, 1991-03-01
-  2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01
-  2020-02-01, 2020-12-01"), sep=',',
-  colClasses=c('Date', 'Date'), header=TRUE)
 
-startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
-enddate <- round_date(Sys.Date())
+source('recessions_and_dates_all.R')
+
 
 df <- tq_get("CPIAUCSL", 
                  get = "economic.data",

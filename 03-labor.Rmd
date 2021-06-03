@@ -2,32 +2,15 @@
 
 
 ```{r, include = FALSE}
-library(readr)
-library(quantmod)
-library(zoo)
-library(tidyquant)
-library(tidyverse)
-library(lubridate)
-library(reshape2)
-library(dplyr)
-library(wbstats)
-library(ggplot2)
-library(usmap)
-library(gtrendsR)
-library(tmap)
-library(spData)
-library(pwt9)
-library(googleVis)
-library(scales)
-library(tibbletime)
-library(data.table)
-library(cowplot)
-
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2","scales","tibbletime","data.table","cowplot")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(list.of.packages, require, character.only=TRUE)
 ```
 
 ## Labor Force Participation
 
-The labor market is one of the most important and relevant macroeconomic measures of health.[^13] There are several different measures of labor market health. First, we might like to know what portion of eligible workers are engaged in either working or job search. We measure this using the **labor force participation rate** (LFP). The LFP tends to rise and fall with long-term economic trends, like women entering the workforce or the reduction in manpower necessary for manufacturing. We calculate the LFP as:
+The labor market is one of the most important and relevant macroeconomic measures of health.[^14] There are several different measures of labor market health. First, we might like to know what portion of eligible workers are engaged in either working or job search. We measure this using the **labor force participation rate** (LFP). The LFP tends to rise and fall with long-term economic trends, like women entering the workforce or the reduction in manpower necessary for manufacturing. We calculate the LFP as:
 
 $$ \text{LFP} = \frac{\text{Unemployed}+\text{Employed}}{\text{Eligible Population}} \times 100 $$
 
@@ -37,25 +20,8 @@ We can see that structural forces shift labor force participation (Figure \@ref(
 
 # Set up recession indicators
 
+source('recessions_and_dates_all.R')
 
-recessions.df = read.table(textConnection(
-  "Peak, Trough
-  1948-11-01, 1949-10-01
-  1953-07-01, 1954-05-01
-  1957-08-01, 1958-04-01
-  1960-04-01, 1961-02-01
-  1969-12-01, 1970-11-01
-  1973-11-01, 1975-03-01
-  1980-01-01, 1980-07-01
-  1981-07-01, 1982-11-01
-  1990-07-01, 1991-03-01
-  2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01
-  2020-02-01, 2020-12-01"), sep=',',
-  colClasses=c('Date', 'Date'), header=TRUE)
-
-startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
-enddate <- round_date(Sys.Date())
 
 df <- tq_get("CIVPART", 
                  get = "economic.data",
@@ -163,7 +129,7 @@ ggplot(data=filter(df2,year(date)>2006),
            fill=ifelse(dj>0,"up m/m", 
                        ifelse(dj==0,"no change", "down m/m"))))+
   geom_col(alpha=0.85,color=NA)+
-  #eom_rug()+
+  #geom_rug()+
   scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
   theme_light()+
   scale_color_manual(values=c("#d73027","#4575b4","#4575b4"),
@@ -171,7 +137,7 @@ ggplot(data=filter(df2,year(date)>2006),
   scale_fill_manual(values=c("#d73027","#4575b4","#4575b4"),
                     name="Monthly change")+
   geom_rug(sides="b")+
-  scale_x_date(lim=as.Date(c("2007-01-01","2020-06-01")),date_breaks="1 years",date_labels="%Y")+
+  scale_x_date(lim=as.Date(c("2007-01-01","2021-06-01")),date_breaks="1 years",date_labels="%Y")+
   #scale_x_date(date_labels="%Y",date_breaks="1 year")+
   theme(legend.position="none",
         plot.caption=element_text(hjust=0),
@@ -224,7 +190,7 @@ ggplot(data=filter(df2,!is.na(NROU2)),aes(x=date,y=UNRATE,label=UNRATE))+
 
 ## Long-Run Trends v. Short-Run Changes 
 
-```{r neat5, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummetted', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r neat5, echo=FALSE, warning=FALSE, fig.cap='Labor Force Participation Has Plummeted', out.width='80%', fig.asp=.75, fig.align='center'}
 
 dfs<-fread("https://download.bls.gov/pub/time.series/ln/ln.series")
 
@@ -310,4 +276,4 @@ ggplot(data=df2, aes(x=date,y=EMRATIO,label=EMRATIO))+
 
 
 
-[^13]: Many of the graphs here are adapted from code available from Len Kiefer's blog post [http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/](http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/). 
+[^14]: Many of the graphs here are adapted from code available from Len Kiefer's blog post [http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/](http://lenkiefer.com/2018/03/11/charting-jobs-friday-with-r/). 

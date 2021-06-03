@@ -1,31 +1,16 @@
 # Introduction {#intro}
 
 ```{r, include = FALSE}
-library(readr)
-library(quantmod)
-library(zoo)
-library(tidyquant)
-library(tidyverse)
-library(lubridate)
-library(reshape2)
-library(dplyr)
-library(wbstats)
-library(ggplot2)
-library(usmap)
-library(gtrendsR)
-library(tmap)
-library(spData)
-library(pwt9)
-library(googleVis)
-
-
+options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(list.of.packages, require, character.only=TRUE)
 ```
 
 In Figure \@ref(fig:unems) below, you will see the unemployment rate for four countries averaged over each year. The unemployment rate measures the percent of people who cannot find a job in the group of those people either working or looking for work. It seems like a mouthful, but we are estimating the proportion of people who are technically in the *labor force*. 
 
 ```{r unems, echo = FALSE, fig.cap='Unemployment Rates Around the World', out.width='80%', fig.asp=.75, fig.align='center'}
-# df <- wb(country = c("BRA","IND","MEX","USA"),
-#                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, POSIXct = TRUE)
 df.wbnew <- wb_data(country = c("BRA","IND","MEX","USA"),
                indicator = c("SL.UEM.TOTL.ZS"), mrv=30, gapfill=TRUE, date_as_class_date = TRUE, return_wide = FALSE)
 
@@ -56,33 +41,11 @@ In recent months the COVID-19 crisis has gripped the world and put our global ec
 
 ```{r jobs, echo = FALSE, fig.cap='Jobless Claims Skyrocket in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
 
-recessions.df = read.table(textConnection(
-  "Peak, Trough
-  1948-11-01, 1949-10-01
-  1953-07-01, 1954-05-01
-  1957-08-01, 1958-04-01
-  1960-04-01, 1961-02-01
-  1969-12-01, 1970-11-01
-  1973-11-01, 1975-03-01
-  1980-01-01, 1980-07-01
-  1981-07-01, 1982-11-01
-  1990-07-01, 1991-03-01
-  2001-03-01, 2001-11-01
-  2007-12-01, 2009-06-01
-  2020-02-01, 2020-12-01"), sep=',',
-  colClasses=c('Date', 'Date'), header=TRUE)
-
-startdate <- round_date(Sys.Date() - lubridate::years(25),"month")
-enddate <- round_date(Sys.Date())
-
+source('recessions_and_dates_50.R')
 
 df <- tq_get("ICSA", 
                  get = "economic.data",
                  from = startdate)
-# 
-# df %>% 
-#   spread(symbol,price) %>%
-#   mutate(ICSA = ICSA/1000) -> df
 
 df %>% 
   pivot_wider(names_from=symbol, values_from=price) %>% 
@@ -139,7 +102,7 @@ df2 <- df %>%
          Claims = ICSA)
 
 knitr::kable(
-  tail(df2, 50), caption = "Initial Unemployment Claims for Most Recent 50 Weeks \n (1000's)", booktabs = TRUE, 
+  tail(df2, 70), caption = "Initial Unemployment Claims for Most Recent 70 Weeks \n (1000's)", booktabs = TRUE, 
   format.args = list(big.mark = ",", scientific = FALSE)
 )
 ```

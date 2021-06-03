@@ -1,0 +1,26 @@
+\ifx\undefined\bysame
+\newcommand{\bysame}{\leavevmode\hbox to\leftmargin{\hrulefill\,\,}}
+\fi
+\begin{thebibliography}{xx}
+
+\harvarditem[Jones]{Jones}{2021}{jones}
+{\bf Jones, Charles~I.}, {\it Macroeconomics}, New York, NY: W.W. Norton \&
+  Company, 2021.
+
+\harvarditem[Taylor and Weerapana]{Taylor and Weerapana}{2018}{tw}
+{\bf Taylor, John~B. and Akila Weerapana}, {\it Principles of Economics},
+  Boston, MA: FlatWorld, 2018.
+
+\harvarditem[{The CORE Team}]{{The CORE Team}}{2020a}{doing}
+{\bf {The CORE Team}}, {\it Doing Economics}, New York, NY: Oxford University
+  Press, 2020.
+
+\harvarditem[{The CORE Team}]{{The CORE Team}}{2020b}{core}
+{\bf \bysame{}}, {\it The Economy}, New York, NY: Oxford University Press,
+  2020.
+
+\harvarditem[{The CORE Team}]{{The CORE Team}}{2020c}{espp}
+{\bf \bysame{}}, {\it Economy, Society, \& Public Policy}, New York, NY: Oxford
+  University Press, 2020.
+
+\end{thebibliography}
