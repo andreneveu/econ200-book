@@ -1,8 +1,17 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Money \& Banking {#money}
 
 ```{r, include = FALSE}
 options(repos = "http://lib.stat.cmu.edu/R/CRAN/")
-list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2","kable","kableExtra")
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output())
+    "latex" else "pipe"
+})
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2","kableExtra")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only=TRUE)
@@ -52,7 +61,8 @@ text_tbl <- dplyr::mutate_if(text_tbl, is.numeric, format_dol_fun)
 
 knitr::kable(
   text_tbl, "html", caption = "**Logan’s Household Balance Sheet**", booktabs = TRUE, col.names = c("","","",""), align = 'lrlr',
-  format.args = list(big.mark = ",", scientific = FALSE)
+  format.args = list(big.mark = ",", scientific = FALSE),
+  booktabs=TRUE
   ) %>%
   kable_styling(full_width = F) %>%
   column_spec(1, bold = T) %>%

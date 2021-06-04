@@ -45,17 +45,17 @@ p<- ggplot(df.wbnew, aes(x = date, y = value, color = iso2c)) +
        title="Brazil, India, Mexico, & U.S. Unemployment Rates",
        subtitle="Annual Average Percent of Labor Force Unemployed",
        caption="Source: World Bank")
-# p
+p
 
 ## In order to make pdf, you have to eliminate the animation here and put "p" above to render the plot
-anim <- p + geom_point() +
-  transition_reveal(date) +
-  enter_fade()+
-  exit_fade()
-anim
-
-animate(anim, duration = 10, fps = 10, end_pause = 30, renderer = gifski_renderer())
-anim_save("nationunem.mp4")
+# anim <- p + geom_point() +
+#   transition_reveal(date) +
+#   enter_fade()+
+#   exit_fade()
+# anim
+# 
+# animate(anim, duration = 10, fps = 10, end_pause = 30, renderer = gifski_renderer())
+# anim_save("nationunem.mp4")
 ```
 	
 
