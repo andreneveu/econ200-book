@@ -287,7 +287,7 @@ Starting from Table \@ref(tab:t9), Jupiter’s managers want to make some loans.
 ```{r t10, echo=FALSE}
 text_tbl <- data.frame(
   Col1 = c("Excess Reserves","Loan","","Excess Reserves","Total"),
-  Col2 = c(-20000,+20000,NA,+18000,+20000),
+  Col2 = c(-20000,+20000,NA,+20000,+20000),
   Col3 = c("","","Deposits","","Total"),
   Col4 = c(NA,NA,+20000,NA,+20000)
 )
