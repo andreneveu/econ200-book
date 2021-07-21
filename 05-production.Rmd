@@ -9,7 +9,7 @@ lapply(list.of.packages, require, character.only=TRUE)
 
 Measures of output and production
 
-```{r output, echo = FALSE, fig.cap='Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r output, echo = FALSE, fig.cap='Real Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
 
 
 source('recessions_and_dates_all.R')
@@ -42,7 +42,7 @@ df %>% ggplot(aes(x=date,y=GDP,label=GDP)) +
 
 
 
-```{r output2, echo = FALSE, fig.cap='Output Exhibits Both Growth and Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r output2, echo = FALSE, fig.cap='Growth Rate of Real GDP', out.width='80%', fig.asp=.75, fig.align='center'}
 
 df <- tq_get("GDPC1", 
                  get = "economic.data",
@@ -129,7 +129,7 @@ df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) +
     coord_cartesian(xlim=c(startdate - lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
 ```
 
-```{r output5, echo = FALSE, fig.cap='Per Capita Also Exhibits Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r output5, echo = FALSE, fig.cap='Alternative Scenarios of GDP Path', out.width='80%', fig.asp=.75, fig.align='center'}
 
 startdate <- round_date(Sys.Date() - lubridate::years(70),"month")
 enddate <- round_date(Sys.Date() + lubridate::years(5))
@@ -184,7 +184,7 @@ ggplot(data=filter(df2,!is.na(GDPPOT)), aes(x=date,y=GDP,label=GDP)) +
 
 ```
 
-```{r output6, echo = FALSE, fig.cap='Per Capita Also Exhibits Cycles', out.width='80%', fig.asp=.75, fig.align='center'}
+```{r output6, echo = FALSE, fig.cap='Growth Rates of Real and Potential GDP', out.width='80%', fig.asp=.75, fig.align='center'}
 
 df %>% 
   mutate(gdpgrowth = (((GDP/lag(GDP,1))^4-1)*100),

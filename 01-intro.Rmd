@@ -37,7 +37,7 @@ $$ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text
 
 Something important about Figure \@ref(fig:unems) is that we can see in some countries the unemployment rate is much higher than in other countries. Partially this is because we do not all use the same measurements for those who are either technically unemployed or working. However, if we assume countries do a consistent job in measuring these rates, the changes are still somewhat accurate. For example, in the United States a monthly survey of about 60,000 households counts those considered unemployed not just as those people collecting unemployment payments, but also includes all those people who have actively sought work in the past four weeks [(Bureau of Labor Statistics)](https://www.bls.gov/cps/cps_htgm.htm). 
 
-In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figure \@ref(fig:jobs) there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure \@ref(fig:vmt)). 
+In 2020, the COVID-19 crisis gripped the world and put our global economy in a precarious position. As we can see from Figure \@ref(fig:jobs) there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure \@ref(fig:vmt)). 
 
 ```{r jobs, echo = FALSE, fig.cap='Jobless Claims Skyrocket in 2020', out.width='80%', fig.asp=.75, fig.align='center'}
 
@@ -94,17 +94,26 @@ vmt %>% ggplot(aes(x=date,y=MMT,label=MMT)) +
 
 ```
 
-Table \@ref(tab:initial) shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before. 
+Table \@ref(tab:initial) shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before.[^1] 
 
 ```{r initial, echo=FALSE}
 df2 <- df %>% 
   rename(Date = date,
-         Claims = ICSA)
+         Claims = ICSA) %>% 
+  filter(Date > as.Date("2019-05-01")) %>% 
+  mutate(month = month(Date),
+         year = year(Date)) %>% 
+  group_by(month,year) %>% 
+  filter(Date == max(Date)) %>% 
+  mutate(Date = floor_date(Date, unit = "month")) %>% 
+  ungroup() %>% 
+  select(Date,Claims) 
 
-knitr::kable(
-  tail(df2, 70), caption = "Initial Unemployment Claims for Most Recent 70 Weeks \n (1000's)", booktabs = TRUE, 
+knitr::kable(df2, caption = "Initial Unemployment Claims Since mid-2019 \n (1000's)", booktabs = TRUE, 
   format.args = list(big.mark = ",", scientific = FALSE)
-)
+) 
 ```
+
+[^1]: For brevity, the weekly data here is summarized into monthly by taking the final week of each month and attributing it to the full month.
 
 

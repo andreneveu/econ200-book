@@ -24,7 +24,7 @@
 <meta name="author" content="Andre R. Neveu" />
 
 
-<meta name="date" content="2021-07-14" />
+<meta name="date" content="2021-07-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,33 +53,9 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -157,7 +133,7 @@ Figure 1.1: Unemployment Rates Around the World
 <p>We measure the unemployment rate as:</p>
 <p><span class="math display">\[ \text{Unemployment Rate} = \frac{\text{Unemployed}}{\text{Unemployed} + \text{Employed}} \times 100 \]</span></p>
 <p>Something important about Figure <a href="intro.html#fig:unems">1.1</a> is that we can see in some countries the unemployment rate is much higher than in other countries. Partially this is because we do not all use the same measurements for those who are either technically unemployed or working. However, if we assume countries do a consistent job in measuring these rates, the changes are still somewhat accurate. For example, in the United States a monthly survey of about 60,000 households counts those considered unemployed not just as those people collecting unemployment payments, but also includes all those people who have actively sought work in the past four weeks <a href="https://www.bls.gov/cps/cps_htgm.htm">(Bureau of Labor Statistics)</a>.</p>
-<p>In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figure <a href="intro.html#fig:jobs">1.2</a> there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure <a href="intro.html#fig:vmt">1.3</a>).</p>
+<p>In 2020, the COVID-19 crisis gripped the world and put our global economy in a precarious position. As we can see from Figure <a href="intro.html#fig:jobs">1.2</a> there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure <a href="intro.html#fig:vmt">1.3</a>).</p>
 <div class="figure" style="text-align: center"><span id="fig:jobs"></span>
 <img src="econ200-book_files/figure-html/jobs-1.png" alt="Jobless Claims Skyrocket in 2020" width="80%" />
 <p class="caption">
@@ -170,9 +146,9 @@ Figure 1.2: Jobless Claims Skyrocket in 2020
 Figure 1.3: Travel Collapses in 2020
 </p>
 </div>
-<p>Table <a href="intro.html#tab:initial">1.1</a> shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before.</p>
+<p>Table <a href="intro.html#tab:initial">1.1</a> shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <table>
-<caption><span id="tab:initial">Table 1.1: </span>Initial Unemployment Claims for Most Recent 70 Weeks
+<caption><span id="tab:initial">Table 1.1: </span>Initial Unemployment Claims Since mid-2019
 (1000’s)</caption>
 <thead>
 <tr class="header">
@@ -182,288 +158,122 @@ Figure 1.3: Travel Collapses in 2020
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-03-07</td>
-<td align="right">212</td>
+<td align="left">2019-05-01</td>
+<td align="right">218</td>
 </tr>
 <tr class="even">
-<td align="left">2020-03-14</td>
-<td align="right">256</td>
+<td align="left">2019-06-01</td>
+<td align="right">223</td>
 </tr>
 <tr class="odd">
-<td align="left">2020-03-21</td>
-<td align="right">2,923</td>
+<td align="left">2019-07-01</td>
+<td align="right">216</td>
 </tr>
 <tr class="even">
-<td align="left">2020-03-28</td>
+<td align="left">2019-08-01</td>
+<td align="right">218</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-09-01</td>
+<td align="right">217</td>
+</tr>
+<tr class="even">
+<td align="left">2019-10-01</td>
+<td align="right">216</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-11-01</td>
+<td align="right">219</td>
+</tr>
+<tr class="even">
+<td align="left">2019-12-01</td>
+<td align="right">218</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-01-01</td>
+<td align="right">210</td>
+</tr>
+<tr class="even">
+<td align="left">2020-02-01</td>
+<td align="right">216</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-03-01</td>
 <td align="right">5,985</td>
 </tr>
-<tr class="odd">
-<td align="left">2020-04-04</td>
-<td align="right">6,149</td>
-</tr>
 <tr class="even">
-<td align="left">2020-04-11</td>
-<td align="right">4,869</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-04-18</td>
-<td align="right">4,202</td>
-</tr>
-<tr class="even">
-<td align="left">2020-04-25</td>
+<td align="left">2020-04-01</td>
 <td align="right">3,451</td>
 </tr>
 <tr class="odd">
-<td align="left">2020-05-02</td>
-<td align="right">2,784</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-09</td>
-<td align="right">2,315</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-16</td>
-<td align="right">2,149</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-23</td>
-<td align="right">1,887</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-30</td>
+<td align="left">2020-05-01</td>
 <td align="right">1,605</td>
 </tr>
 <tr class="even">
-<td align="left">2020-06-06</td>
-<td align="right">1,537</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-06-13</td>
-<td align="right">1,472</td>
-</tr>
-<tr class="even">
-<td align="left">2020-06-20</td>
-<td align="right">1,460</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-06-27</td>
+<td align="left">2020-06-01</td>
 <td align="right">1,436</td>
 </tr>
-<tr class="even">
-<td align="left">2020-07-04</td>
-<td align="right">1,398</td>
-</tr>
 <tr class="odd">
-<td align="left">2020-07-11</td>
-<td align="right">1,479</td>
-</tr>
-<tr class="even">
-<td align="left">2020-07-18</td>
-<td align="right">1,398</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-07-25</td>
+<td align="left">2020-07-01</td>
 <td align="right">1,262</td>
 </tr>
 <tr class="even">
 <td align="left">2020-08-01</td>
-<td align="right">1,043</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-08-08</td>
-<td align="right">883</td>
-</tr>
-<tr class="even">
-<td align="left">2020-08-15</td>
-<td align="right">920</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-08-22</td>
-<td align="right">872</td>
-</tr>
-<tr class="even">
-<td align="left">2020-08-29</td>
 <td align="right">875</td>
 </tr>
 <tr class="odd">
-<td align="left">2020-09-05</td>
-<td align="right">881</td>
-</tr>
-<tr class="even">
-<td align="left">2020-09-12</td>
-<td align="right">860</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-09-19</td>
-<td align="right">860</td>
-</tr>
-<tr class="even">
-<td align="left">2020-09-26</td>
+<td align="left">2020-09-01</td>
 <td align="right">803</td>
 </tr>
-<tr class="odd">
-<td align="left">2020-10-03</td>
-<td align="right">782</td>
-</tr>
 <tr class="even">
-<td align="left">2020-10-10</td>
-<td align="right">833</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-10-17</td>
-<td align="right">798</td>
-</tr>
-<tr class="even">
-<td align="left">2020-10-24</td>
-<td align="right">768</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-10-31</td>
+<td align="left">2020-10-01</td>
 <td align="right">765</td>
 </tr>
-<tr class="even">
-<td align="left">2020-11-07</td>
-<td align="right">728</td>
-</tr>
 <tr class="odd">
-<td align="left">2020-11-14</td>
-<td align="right">732</td>
-</tr>
-<tr class="even">
-<td align="left">2020-11-21</td>
-<td align="right">762</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-11-28</td>
+<td align="left">2020-11-01</td>
 <td align="right">719</td>
 </tr>
 <tr class="even">
-<td align="left">2020-12-05</td>
-<td align="right">853</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-12-12</td>
-<td align="right">873</td>
-</tr>
-<tr class="even">
-<td align="left">2020-12-19</td>
-<td align="right">803</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-12-26</td>
+<td align="left">2020-12-01</td>
 <td align="right">763</td>
 </tr>
-<tr class="even">
-<td align="left">2021-01-02</td>
-<td align="right">781</td>
-</tr>
 <tr class="odd">
-<td align="left">2021-01-09</td>
-<td align="right">904</td>
-</tr>
-<tr class="even">
-<td align="left">2021-01-16</td>
-<td align="right">886</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-01-23</td>
-<td align="right">836</td>
-</tr>
-<tr class="even">
-<td align="left">2021-01-30</td>
+<td align="left">2021-01-01</td>
 <td align="right">837</td>
 </tr>
-<tr class="odd">
-<td align="left">2021-02-06</td>
-<td align="right">863</td>
-</tr>
 <tr class="even">
-<td align="left">2021-02-13</td>
-<td align="right">847</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-02-20</td>
-<td align="right">747</td>
-</tr>
-<tr class="even">
-<td align="left">2021-02-27</td>
+<td align="left">2021-02-01</td>
 <td align="right">761</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-03-06</td>
-<td align="right">734</td>
-</tr>
-<tr class="even">
-<td align="left">2021-03-13</td>
-<td align="right">765</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-03-20</td>
-<td align="right">658</td>
-</tr>
-<tr class="even">
-<td align="left">2021-03-27</td>
+<td align="left">2021-03-01</td>
 <td align="right">729</td>
 </tr>
-<tr class="odd">
-<td align="left">2021-04-03</td>
-<td align="right">742</td>
-</tr>
 <tr class="even">
-<td align="left">2021-04-10</td>
-<td align="right">586</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-04-17</td>
-<td align="right">566</td>
-</tr>
-<tr class="even">
-<td align="left">2021-04-24</td>
+<td align="left">2021-04-01</td>
 <td align="right">590</td>
 </tr>
 <tr class="odd">
 <td align="left">2021-05-01</td>
-<td align="right">507</td>
-</tr>
-<tr class="even">
-<td align="left">2021-05-08</td>
-<td align="right">478</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-05-15</td>
-<td align="right">444</td>
-</tr>
-<tr class="even">
-<td align="left">2021-05-22</td>
-<td align="right">405</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-05-29</td>
 <td align="right">388</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-05</td>
-<td align="right">374</td>
+<td align="left">2021-06-01</td>
+<td align="right">368</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-12</td>
-<td align="right">418</td>
-</tr>
-<tr class="even">
-<td align="left">2021-06-19</td>
-<td align="right">416</td>
-</tr>
-<tr class="odd">
-<td align="left">2021-06-26</td>
-<td align="right">371</td>
-</tr>
-<tr class="even">
-<td align="left">2021-07-03</td>
-<td align="right">373</td>
+<td align="left">2021-07-01</td>
+<td align="right">360</td>
 </tr>
 </tbody>
 </table>
 
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>For brevity, the weekly data here is summarized into monthly by taking the final week of each month and attributing it to the full month.<a href="intro.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
