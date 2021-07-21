@@ -945,7 +945,8 @@ tq_get(c("M1SL","M1","SAVINGS","M2SL"),
   scale_color_manual(values = c("darkgreen","darkred","darkblue")) + 
   labs(x = "Date", y = "Billions of Dollars", title = "Money Supply: Old M1 + Savings, New M1, and M2", 
        subtitle = "After April 2020 M1 includes savings", color = "Series") +
-  theme(legend.position="bottom") 
+  theme(legend.position="bottom") + 
+  theme_bw()
 ```
 When plotted together, we can see that if we include savings account balances in the *old M1* definition, that it tracks very closely with M2 until April 2020. Thus, while there are big changes in the COVID-19 pandemic to the various monetary aggregates, the increase in M1 is far less suspicious than some pundits might lead you to believe. The *New M1* series provided by the Fed did not go back and add in savings as I have done here. However, you might now notice that including that aggregate matters for the overall discussion.
 
