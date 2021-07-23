@@ -1,7 +1,7 @@
 # Inflation {#inflation}
 
 ```{r, include = FALSE}
-list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2")
+list.of.packages <- c("readr","tidyverse","lubridate","reshape2","dplyr","tidyquant", "zoo","RCurl", "quantmod","wbstats","usmap","gtrendsR","tmap","spData","pwt9","googleVis","gifski","gganimate","ggplot2","scales")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(list.of.packages, require, character.only=TRUE)
@@ -71,5 +71,125 @@ df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) +
 ) + 
     scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
     coord_cartesian(xlim=c(startdate-lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
+
+```
+
+
+```{r inflation, echo = FALSE, out.width='80%', fig.asp=.75, fig.align='center'}
+recessions.df = read.table(textConnection(
+  "Peak, Trough
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01
+  2020-02-01, 2020-04-01"), sep=',',
+  colClasses=c('Date', 'Date'), header=TRUE)
+
+startdate <- round_date(Sys.Date() - lubridate::years(45),"month")
+enddate <- round_date(Sys.Date())
+
+index <- tq_get(c("CPIAUCSL","CPILFESL","PCEPI","PCEPILFE"), 
+                 get = "economic.data",
+                 from = startdate)
+
+rates <- index %>% pivot_wider(names_from = symbol, values_from = price) %>% 
+  drop_na() %>% 
+  mutate(CPI = (CPIAUCSL/lag(CPIAUCSL,12) - 1) * 100,
+         CPI.monthly = (CPIAUCSL/lag(CPIAUCSL,1) - 1),
+         "CPI Core" = (CPILFESL/lag(CPILFESL,12) - 1) * 100,
+         PCE = (PCEPI/lag(PCEPI,12) - 1) * 100,
+         "PCE Core" = (PCEPILFE/lag(PCEPILFE,12) - 1) * 100) %>% 
+  drop_na() %>% 
+  mutate(post08 = ifelse((date < "2009-06-01"),0,1)) %>%
+  group_by(post08) %>%
+  mutate(avggrowth = mean(CPI.monthly, na.rm=TRUE),
+         rollgrowth = rollmean(CPI.monthly, 48, na.pad = TRUE, align = "right"),
+         Count = 1:n(),
+         endval = last(CPIAUCSL),
+         min1 = min(rollgrowth, na.rm=TRUE)) %>% 
+  transform(endval = min(endval),
+            mingrowth = max(min1),
+            avggrowth = max(avggrowth)) %>% 
+  mutate(newpost08 = ifelse(post08 == 1,endval*(1+avggrowth)^Count,CPIAUCSL),
+         minpost08 = ifelse(post08 == 1,endval*(1+mingrowth)^Count,CPIAUCSL)) 
+  
+
+ggplot(data=filter(rates,!is.na(CPIAUCSL)), aes(x=date,y=CPIAUCSL,label=CPIAUCSL)) + 
+  geom_line(aes(y=newpost08), linetype=2, color = "red")+
+  geom_line(aes(y=minpost08), linetype=2, color = "green")+
+  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+                                                   xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
+  geom_line(size=1.1, na.rm=TRUE) +
+  theme_light(base_size=8) +
+  theme(legend.position="top",
+        plot.caption=element_text(hjust=0),
+        plot.title=element_text(size=16,color="black"))+
+  labs(x = "", y = "", color = "Series", 
+       title="U.S. Consumer Price Index: Monthly and Alternative Scenarios",
+       subtitle="Black line, Normal CPI \nRed line, CPI if growth at pre-2008 average \nGreen line, CPI if growth at worst 4-year average since 2008",
+       caption="Source: U.S. Bureau of Labor Statistics [CPIAUCSL]/n
+       Note: Growth rates calculated as average one period percentage change."
+  ) + 
+  scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())
+
+
+
+
+
+
+  
+rates2 <- rates %>%  
+  select(CPI,CPI.Core,PCE,PCE.Core,date) %>% 
+  rename("CPI Core" = CPI.Core,
+         "PCE Core" = PCE.Core) %>% 
+  pivot_longer(cols = !date, names_to = "symbol", values_to = "price") 
+
+
+rates2 %>% 
+  ggplot(aes(x=date,y=price,color=symbol)) + 
+    geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +  geom_line(size=1) +
+  scale_color_brewer(palette = "Dark2") + 
+  labs(x = "Date", y="", title = "Inflation \nCPI, CPI Core, PCE, and PCE Core", subtitle = "Year over Year", color = "") + 
+  theme_bw() +
+  scale_x_date(breaks = "10 years", labels = date_format("%Y")) +
+  facet_grid(. ~ symbol) +
+  theme(legend.position="none",
+        plot.caption = element_text(hjust = 0))
+
+
+
+
+
+
+
+
+
+mindate.short <- as.Date("2006-01-01")
+
+recessions.df.short <- recessions.df %>% filter(Peak > mindate.short)
+  
+rates2 <- rates %>%  
+  select(CPI,CPI.Core,PCE,PCE.Core,date) %>% 
+  rename("CPI Core" = CPI.Core,
+         "PCE Core" = PCE.Core) %>% 
+  pivot_longer(cols = !date, names_to = "symbol", values_to = "price") %>% 
+  filter(date > mindate.short)
+
+
+
+rates2 %>% 
+  ggplot(aes(x=date,y=price,color=symbol)) + 
+    geom_rect(data=recessions.df.short, inherit.aes=F, aes(xmin=Peak,
+    xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +  geom_line(size=1) +
+  scale_color_brewer(palette = "Dark2") + 
+  labs(x = "Date", y="", title = "Inflation \nCPI, CPI Core, PCE, and PCE Core", subtitle = "Year over Year", color = "") + 
+  theme_bw() +
+  scale_x_date(breaks = "4 years", labels = date_format("%Y")) +
+  facet_grid(. ~ symbol) +
+  theme(legend.position="none",
+        plot.caption = element_text(hjust = 0))
+
 
 ```

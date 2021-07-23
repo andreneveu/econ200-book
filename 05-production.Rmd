@@ -47,28 +47,35 @@ df %>% ggplot(aes(x=date,y=GDP,label=GDP)) +
 df <- tq_get("GDPC1", 
                  get = "economic.data",
                  from = startdate - lubridate::years(1))
+recessions.df.short <- recessions.df %>% 
+  filter(Peak > as.Date("1995-01-01"))
 
 df %>% 
   pivot_wider(names_from=symbol, values_from=price) %>% 
-  mutate(pct_chg = (GDPC1/lag(GDPC1,4) - 1) * 100) %>%
+  mutate("Year over year" = (GDPC1/lag(GDPC1,4) - 1) * 100,
+         "Annualized" = ((GDPC1/lag(GDPC1,1))^4 - 1) * 100) %>%
   mutate(date = date + months(3)) %>%
-  filter(complete.cases(.)) -> df
+  filter(complete.cases(.)) %>% 
+  pivot_longer(cols = !date, names_to = "symbol") %>% 
+  filter(symbol != "GDPC1") -> df
 
-df %>% ggplot(aes(x=date,y=pct_chg,label=pct_chg)) + 
-  geom_rect(data=recessions.df, inherit.aes=F, aes(xmin=Peak,
+df %>% ggplot(aes(x=date,y=value,color=symbol)) + 
+  geom_rect(data=recessions.df.short, inherit.aes=F, aes(xmin=Peak,
     xmax=Trough, ymin=-Inf, ymax=+Inf), fill='darkgray', alpha=0.5) +
   geom_line(size=1.05) +
-    theme_light() +
     theme(legend.position="none",
         plot.caption=element_text(hjust=0),
         plot.title=element_text(size=16,color="black"))+
   labs(x = "", y = "", color = "Series", 
        title="Growth Rate of U.S. Gross Domestic Product",
-       subtitle="Year over year percentage change",
+       subtitle="Percentage change",
        caption="Source: U.S. Bureau of Economic Analysis [GDPC1]"
 ) + 
-    scale_y_continuous(labels=scales::comma,sec.axis=dup_axis())+
-    coord_cartesian(xlim=c(startdate - lubridate::years(1),enddate),ylim=c(floor(min(df$pct_chg)),ceiling(max(df$pct_chg))))
+    theme_bw() +
+        facet_grid(symbol ~ ., scales = "free") +
+    theme(legend.position="none",
+          plot.caption = element_text(hjust = 0))
+
 ```
 
 
