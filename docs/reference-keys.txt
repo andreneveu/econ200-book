@@ -46,6 +46,8 @@ fig:labor1
 fig:neat
 fig:neat2
 fig:neat3
+fig:neat5
+fig:neat6
 fig:neat7
 fig:cpi1
 fig:cpi2
