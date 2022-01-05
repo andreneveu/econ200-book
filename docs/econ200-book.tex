@@ -4,10 +4,21 @@
 %
 \documentclass[
 ]{book}
+\title{Materials for Macroeconomics}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Intro, Intermediate, and Advanced}
+\author{Andre R. Neveu}
+\date{2022-01-05}
+
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -97,22 +108,11 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
-\ifluatex
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 \usepackage[]{natbib}
 \bibliographystyle{aer}
-
-\title{Materials for Macroeconomics}
-\usepackage{etoolbox}
-\makeatletter
-\providecommand{\subtitle}[1]{% add subtitle to \maketitle
-  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
-}
-\makeatother
-\subtitle{Intro, Intermediate, and Advanced}
-\author{Andre R. Neveu}
-\date{2021-06-03}
 
 \begin{document}
 \maketitle
@@ -153,7 +153,7 @@ We measure the unemployment rate as:
 
 Something important about Figure \ref{fig:unems} is that we can see in some countries the unemployment rate is much higher than in other countries. Partially this is because we do not all use the same measurements for those who are either technically unemployed or working. However, if we assume countries do a consistent job in measuring these rates, the changes are still somewhat accurate. For example, in the United States a monthly survey of about 60,000 households counts those considered unemployed not just as those people collecting unemployment payments, but also includes all those people who have actively sought work in the past four weeks \href{https://www.bls.gov/cps/cps_htgm.htm}{(Bureau of Labor Statistics)}.
 
-In recent months the COVID-19 crisis has gripped the world and put our global economy in a precarious position. As we can see from Figure \ref{fig:jobs} there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure \ref{fig:vmt}).
+In 2020, the COVID-19 crisis gripped the world and put our global economy in a precarious position. As we can see from Figure \ref{fig:jobs} there has been a dramatic increase in the number of people who are newly jobless. Also, other metrics like vehicle miles travelled in the U.S. have crashed dramatically (Figure \ref{fig:vmt}).
 
 \begin{figure}
 
@@ -173,100 +173,55 @@ In recent months the COVID-19 crisis has gripped the world and put our global ec
 \caption{Travel Collapses in 2020}\label{fig:vmt}
 \end{figure}
 
-Table \ref{tab:initial} shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before.
+Table \ref{tab:initial} shows the initial claims data for the past fifteen weeks, going back to the first weeks of the crisis in early March. Notice that the number of people filing for unemployment rose by a factor of more than ten! These unemployment claim numbers had literally never occurred in the U.S. before.\footnote{\textbf{Real} variables would include things that can be measured objectively, like hiring someone to mow my lawn. The labor it takes to mow the lawn is \emph{real}, as is the machine (i.e., physical capital) used to cut the lawn. The amount of a given currency paid to the worker or to buy the mower is a \textbf{nominal} variable since it is just representing relative value.}
 
 \begin{table}
 
-\caption{\label{tab:initial}Initial Unemployment Claims for Most Recent 70 Weeks 
+\caption{\label{tab:initial}Initial Unemployment Claims Since mid-2019 
  (1000's)}
 \centering
 \begin{tabular}[t]{lr}
 \toprule
 Date & Claims\\
 \midrule
-2020-02-01 & 205\\
-2020-02-08 & 207\\
-2020-02-15 & 215\\
-2020-02-22 & 218\\
-2020-02-29 & 216\\
+2019-05-01 & 218\\
+2019-06-01 & 223\\
+2019-07-01 & 216\\
+2019-08-01 & 218\\
+2019-09-01 & 217\\
 \addlinespace
-2020-03-07 & 212\\
-2020-03-14 & 256\\
-2020-03-21 & 2,923\\
-2020-03-28 & 5,985\\
-2020-04-04 & 6,149\\
+2019-10-01 & 216\\
+2019-11-01 & 219\\
+2019-12-01 & 218\\
+2020-01-01 & 210\\
+2020-02-01 & 216\\
 \addlinespace
-2020-04-11 & 4,869\\
-2020-04-18 & 4,202\\
-2020-04-25 & 3,451\\
-2020-05-02 & 2,784\\
-2020-05-09 & 2,315\\
+2020-03-01 & 5,985\\
+2020-04-01 & 3,451\\
+2020-05-01 & 1,605\\
+2020-06-01 & 1,436\\
+2020-07-01 & 1,262\\
 \addlinespace
-2020-05-16 & 2,149\\
-2020-05-23 & 1,887\\
-2020-05-30 & 1,605\\
-2020-06-06 & 1,537\\
-2020-06-13 & 1,472\\
+2020-08-01 & 875\\
+2020-09-01 & 803\\
+2020-10-01 & 765\\
+2020-11-01 & 719\\
+2020-12-01 & 763\\
 \addlinespace
-2020-06-20 & 1,460\\
-2020-06-27 & 1,436\\
-2020-07-04 & 1,398\\
-2020-07-11 & 1,479\\
-2020-07-18 & 1,398\\
+2021-01-01 & 837\\
+2021-02-01 & 761\\
+2021-03-01 & 729\\
+2021-04-01 & 590\\
+2021-05-01 & 388\\
 \addlinespace
-2020-07-25 & 1,262\\
-2020-08-01 & 1,043\\
-2020-08-08 & 883\\
-2020-08-15 & 920\\
-2020-08-22 & 872\\
+2021-06-01 & 368\\
+2021-07-01 & 387\\
+2021-08-01 & 345\\
+2021-09-01 & 364\\
+2021-10-01 & 271\\
 \addlinespace
-2020-08-29 & 875\\
-2020-09-05 & 881\\
-2020-09-12 & 860\\
-2020-09-19 & 860\\
-2020-09-26 & 803\\
-\addlinespace
-2020-10-03 & 782\\
-2020-10-10 & 833\\
-2020-10-17 & 798\\
-2020-10-24 & 768\\
-2020-10-31 & 765\\
-\addlinespace
-2020-11-07 & 728\\
-2020-11-14 & 732\\
-2020-11-21 & 762\\
-2020-11-28 & 719\\
-2020-12-05 & 853\\
-\addlinespace
-2020-12-12 & 873\\
-2020-12-19 & 803\\
-2020-12-26 & 763\\
-2021-01-02 & 781\\
-2021-01-09 & 904\\
-\addlinespace
-2021-01-16 & 886\\
-2021-01-23 & 836\\
-2021-01-30 & 837\\
-2021-02-06 & 863\\
-2021-02-13 & 847\\
-\addlinespace
-2021-02-20 & 747\\
-2021-02-27 & 761\\
-2021-03-06 & 734\\
-2021-03-13 & 765\\
-2021-03-20 & 658\\
-\addlinespace
-2021-03-27 & 729\\
-2021-04-03 & 742\\
-2021-04-10 & 586\\
-2021-04-17 & 566\\
-2021-04-24 & 590\\
-\addlinespace
-2021-05-01 & 507\\
-2021-05-08 & 478\\
-2021-05-15 & 444\\
-2021-05-22 & 405\\
-2021-05-29 & 385\\
+2021-11-01 & 227\\
+2021-12-01 & 198\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -624,7 +579,7 @@ Deposits
 
 Excess Reserves
 
-\$18,000
+\$20,000
 
 Total
 
@@ -1560,6 +1515,8 @@ We can see in Figure \ref{fig:neat3} that the unemployment rate in early 2020 wa
 \hypertarget{long-run-trends-v.-short-run-changes}{%
 \section{Long-Run Trends v. Short-Run Changes}\label{long-run-trends-v.-short-run-changes}}
 
+Over time the percentage of men of prime working age (25-54) has fallen, while for women the rate has risen quite significantly. We can see that in the short run there has been a rather large negative shock to participation in the labor force due to the COVID-19 pandemic. This crisis impacted both men and women. A bigger change has appeared in the employment to population ratio which is now at only a level of 58\%, nearly 3\% lower than before the COVID-19 pandemic began. This is the lowest the employment-to-population ratio has been since 1983, a period before millions of women entered the labor force.
+
 \begin{figure}
 
 {\centering \includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/neat5-1} 
@@ -1614,6 +1571,12 @@ For many goods--like tuition--the price level just seems to rise over time. Here
 \caption{Inflation Rates Are Measuring the Change in the Price Level}\label{fig:cpi2}
 \end{figure}
 
+\begin{center}\includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/inflation-1} \end{center}
+
+\begin{center}\includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/inflation-2} \end{center}
+
+\begin{center}\includegraphics[width=0.8\linewidth]{econ200-book_files/figure-latex/inflation-3} \end{center}
+
 \hypertarget{production}{%
 \chapter{Output and Production}\label{production}}
 
@@ -1625,7 +1588,7 @@ Measures of output and production
 
 }
 
-\caption{Output Exhibits Both Growth and Cycles}\label{fig:output}
+\caption{Real Output Exhibits Both Growth and Cycles}\label{fig:output}
 \end{figure}
 
 \begin{figure}
@@ -1634,7 +1597,7 @@ Measures of output and production
 
 }
 
-\caption{Output Exhibits Both Growth and Cycles}\label{fig:output2}
+\caption{Growth Rate of Real GDP}\label{fig:output2}
 \end{figure}
 
 \begin{figure}
@@ -1661,7 +1624,7 @@ Measures of output and production
 
 }
 
-\caption{Per Capita Also Exhibits Cycles}\label{fig:output5}
+\caption{Alternative Scenarios of GDP Path}\label{fig:output5}
 \end{figure}
 
 \begin{figure}
@@ -1670,7 +1633,7 @@ Measures of output and production
 
 }
 
-\caption{Per Capita Also Exhibits Cycles}\label{fig:output6}
+\caption{Growth Rates of Real and Potential GDP}\label{fig:output6}
 \end{figure}
 
   \bibliography{refs.bib}
