@@ -185,7 +185,7 @@ text_tbl <- data.frame(
   Col1 = c("Cash","","Total"),
   Col2 = c(51050,NA,51050),
   Col3 = c("Deposits","Capital","Total"),
-  Col4 = c(1050,50000,50000)
+  Col4 = c(1050,50000,51050)
 )
 
 text_tbl <- dplyr::mutate_if(text_tbl, is.numeric, format_dol_fun)
@@ -215,7 +215,7 @@ text_tbl <- data.frame(
   Col1 = c("Required Reserves","Excess Reserves","Total"),
   Col2 = c(0,51050,51050),
   Col3 = c("Deposits","Capital","Total"),
-  Col4 = c(1050,50000,50000)
+  Col4 = c(1050,50000,51050)
 )
 
 text_tbl <- dplyr::mutate_if(text_tbl, is.numeric, format_dol_fun)

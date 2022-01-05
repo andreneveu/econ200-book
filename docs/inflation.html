@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Inflation | Materials for Macroeconomics</title>
   <meta name="description" content="Examining macroeconomic data for economics students." />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Inflation | Materials for Macroeconomics" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Andre R. Neveu" />
 
 
-<meta name="date" content="2021-07-29" />
+<meta name="date" content="2022-01-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="labor.html"/>
 <link rel="next" href="production.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,36 +51,11 @@
 
 
 
-
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -147,13 +123,13 @@ div.csl-indent {
 <p>Prices for the goods and services we consume change over time. Recall that a price that you pay for a good is simply a <em>nominal</em> value, and does not directly take into account the amount of <em>real</em> work that would be performed to purchase a good. For example, if you were living in the fictional country of Titan, and a bag of chips there cost 30 units, that information is not particularly informative by itself. First, you want to know if “30 units” is a lot. If a typical wage for an hour of work was “3 units” then chips seem expensive costing you about 10 hours of work! However, if a typical wage was “300 units” for an hour of work, then chips are cheap, earned with about six minutes of work! Thus, what is most important to you is the real value.</p>
 <p>For many goods–like tuition–the price level just seems to rise over time. Here, we see the average price <strong>level</strong> for the U.S. as measured by the <strong>Consumer Price Index</strong> (CPI). By itself, the CPI in Figure <a href="inflation.html#fig:cpi1">4.1</a> is not particularly informative. In April 2020, the CPI measured 255.902. What we might be more interested in is the change in the CPI, or inflation seen in Figure <a href="inflation.html#fig:cpi2">4.2</a>. So if we look at the CPI from April 2019 when it measured 254.943, we could see that it increased by:</p>
 <p><span class="math display">\[\left(\frac{255.902}{254.943} - 1\right)\times 100 = 0.4\%\]</span></p>
-<div class="figure" style="text-align: center"><span id="fig:cpi1"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cpi1"></span>
 <img src="econ200-book_files/figure-html/cpi1-1.png" alt="Price Levels Generally Rise Over Time" width="80%" />
 <p class="caption">
 Figure 4.1: Price Levels Generally Rise Over Time
 </p>
 </div>
-<div class="figure" style="text-align: center"><span id="fig:cpi2"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cpi2"></span>
 <img src="econ200-book_files/figure-html/cpi2-1.png" alt="Inflation Rates Are Measuring the Change in the Price Level" width="80%" />
 <p class="caption">
 Figure 4.2: Inflation Rates Are Measuring the Change in the Price Level
@@ -172,7 +148,6 @@ Figure 4.2: Inflation Rates Are Measuring the Change in the Price Level
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -212,6 +187,10 @@ gitbook.start({
 "text": null
 },
 "download": ["econ200-book.pdf", "econ200-book.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "section"
 }
