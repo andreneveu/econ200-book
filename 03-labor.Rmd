@@ -16,7 +16,7 @@ The labor market is one of the most important and relevant macroeconomic measure
 
 $$ \text{LFP} = \frac{\text{Unemployed}+\text{Employed}}{\text{Eligible Population}} \times 100 $$
 
-We can see that structural forces shift labor force participation (Figure \@ref(fig:labor1)). However, LFP does change with cyclical events, such as the case with the recent COVID-19 pandemic.  
+We can see that structural forces shift labor force participation (Figure \@ref(fig:labor1)). However, LFP does change with cyclical events, such as the case with the recent COVID-19 pandemic..  
 
 ```{r labor1, echo = FALSE, fig.cap='The Workforce Shows Structural and Cultural Changes', out.width='80%', fig.asp=.75, fig.align='center'}
 
